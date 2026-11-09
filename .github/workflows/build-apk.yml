@@ -4,8 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       url:
-        description: "URL website (bat dau bang https://)"
-        required: true
+        description: "URL website (https://...). De TRONG neu dung file HTML trong thu muc web/ cua repo"
+        required: false
+        default: ""
         type: string
       app_name:
         description: "Ten app (toi da 30 ky tu)"
@@ -53,7 +54,11 @@ jobs:
       - name: Kiem tra thong tin nhap
         run: |
           set -euo pipefail
-          case "$SITE_URL" in https://*) ;; *) echo "URL phai bat dau bang https://"; exit 1;; esac
+          if [ -n "$SITE_URL" ]; then
+            case "$SITE_URL" in https://*) ;; *) echo "URL phai bat dau bang https://"; exit 1;; esac
+          elif [ ! -f web/index.html ]; then
+            echo "Chua co file web/index.html trong repo. Hay tao file web/index.html (noi dung la trang HTML cua ban) hoac nhap URL."; exit 1
+          fi
           if ! [[ "$PACKAGE_ID" =~ ^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$ ]]; then
             echo "Package ID khong hop le. Vi du dung: com.tenban.cuahang"; exit 1
           fi
@@ -98,21 +103,29 @@ jobs:
         run: |
           set -euo pipefail
           cd app
+          if [ -z "$SITE_URL" ]; then
+            echo "Che do dong goi: dung file HTML trong thu muc web/"
+            rm -rf www/*
+            cp -r ../web/. www/
+          fi
           node - <<'EOF'
           const fs = require('fs');
           const e = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
-          const site = new URL(process.env.SITE_URL);
-          if (site.protocol !== 'https:') throw new Error('Chi chap nhan https');
+          const hasUrl = !!process.env.SITE_URL;
+          const site = hasUrl ? new URL(process.env.SITE_URL) : null;
+          if (hasUrl && site.protocol !== 'https:') throw new Error('Chi chap nhan https');
           const name = process.env.APP_NAME, id = process.env.PACKAGE_ID, code = process.env.VERSION_CODE;
-          const host = site.host;
+          const host = hasUrl ? site.host : '';
+          const startSrc = hasUrl ? e(site.toString()) : 'index.html';
+          const nav = hasUrl ? `<access origin="https://${e(host)}/*" />\n  <allow-navigation href="https://${e(host)}/*" />` : '';
+          const errPref = hasUrl ? `<preference name="errorUrl" value="https://localhost/offline.html" />` : '';
           const cfg = `<?xml version='1.0' encoding='utf-8'?>
           <widget id="${e(id)}" version="1.0.${e(code)}" android-versionCode="${e(code)}" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
             <name>${e(name)}</name>
             <description>${e(name)}</description>
             <author>${e(name)}</author>
-            <content src="${e(site.toString())}" />
-            <access origin="https://${e(host)}/*" />
-            <allow-navigation href="https://${e(host)}/*" />
+            <content src="${startSrc}" />
+            ${nav}
             <allow-intent href="http://*/*" />
             <allow-intent href="https://*/*" />
             <allow-intent href="tel:*" />
@@ -123,7 +136,7 @@ jobs:
             <preference name="hostname" value="localhost" />
             <preference name="android-minSdkVersion" value="24" />
             <preference name="android-targetSdkVersion" value="35" />
-            <preference name="errorUrl" value="https://localhost/offline.html" />
+            ${errPref}
             <platform name="android">
               <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
                 <application android:hardwareAccelerated="true" android:usesCleartextTraffic="false" android:allowBackup="false" />
@@ -140,12 +153,14 @@ jobs:
           </widget>
           `;
           fs.writeFileSync('config.xml', cfg);
+          if (hasUrl) {
           fs.writeFileSync('www/index.html', `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${e(site.toString())}"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body></body></html>`);
           const target = JSON.stringify(site.toString()).replace(/</g, '\\u003c');
           fs.writeFileSync('www/offline.html', `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${e(name)}</title>
           <style>html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;font:16px system-ui,sans-serif;text-align:center}button{font:inherit;padding:12px 24px;border:0;border-radius:10px;background:#2563eb;color:#fff}</style></head>
           <body><main><h1>Không có kết nối mạng</h1><p>Hãy kiểm tra mạng rồi thử lại.</p><button id="r">Thử lại</button></main>
           <script>var t=${target};document.getElementById('r').onclick=function(){location.href=t};addEventListener('online',function(){location.href=t});</script></body></html>`);
+          }
           EOF
 
       - name: Chuan bi keystore de ky app
