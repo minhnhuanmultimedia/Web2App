@@ -141,6 +141,7 @@ jobs:
             <allow-intent href="tel:*" />
             <allow-intent href="mailto:*" />
             <preference name="DisallowOverscroll" value="true" />
+            <preference name="Fullscreen" value="true" />
             <preference name="AndroidXEnabled" value="true" />
             <preference name="scheme" value="https" />
             <preference name="hostname" value="localhost" />
