@@ -42,7 +42,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - uses: actions/setup-java@v4
         with:
@@ -72,14 +72,14 @@ jobs:
           sudo apt-get install -y imagemagick
           npm install -g cordova
           yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
 
       - name: Tao project Cordova
         run: |
           set -euo pipefail
           cordova create app "$PACKAGE_ID" "$APP_NAME"
           cd app
-          cordova platform add android@14
+          cordova platform add android@15
 
       - name: Tao icon
         run: |
@@ -135,4 +135,98 @@ jobs:
             <allow-intent href="http://*/*" />
             <allow-intent href="https://*/*" />
             <allow-intent href="tel:*" />
-            <allow-intent
+            <allow-intent href="mailto:*" />
+            <preference name="DisallowOverscroll" value="true" />
+            <preference name="AndroidXEnabled" value="true" />
+            <preference name="scheme" value="https" />
+            <preference name="hostname" value="localhost" />
+            <preference name="android-minSdkVersion" value="24" />
+            <preference name="android-targetSdkVersion" value="36" />
+            ${errPref}
+            <platform name="android">
+              <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+                <application android:hardwareAccelerated="true" android:usesCleartextTraffic="false" android:allowBackup="false" />
+              </edit-config>
+              <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity[@android:name='MainActivity']">
+                <activity android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" />
+              </edit-config>
+              <icon density="mdpi" src="res/icon/mdpi.png" />
+              <icon density="hdpi" src="res/icon/hdpi.png" />
+              <icon density="xhdpi" src="res/icon/xhdpi.png" />
+              <icon density="xxhdpi" src="res/icon/xxhdpi.png" />
+              <icon density="xxxhdpi" src="res/icon/xxxhdpi.png" />
+            </platform>
+          </widget>
+          `;
+          fs.writeFileSync('config.xml', cfg);
+          if (hasUrl) {
+          fs.writeFileSync('www/index.html', `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${e(site.toString())}"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body></body></html>`);
+          const target = JSON.stringify(site.toString()).replace(/</g, '\\u003c');
+          fs.writeFileSync('www/offline.html', `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${e(name)}</title>
+          <style>html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;font:16px system-ui,sans-serif;text-align:center}button{font:inherit;padding:12px 24px;border:0;border-radius:10px;background:#2563eb;color:#fff}</style></head>
+          <body><main><h1>Không có kết nối mạng</h1><p>Hãy kiểm tra mạng rồi thử lại.</p><button id="r">Thử lại</button></main>
+          <script>var t=${target};document.getElementById('r').onclick=function(){location.href=t};addEventListener('online',function(){location.href=t});</script></body></html>`);
+          }
+          EOF
+
+      - name: Chuan bi keystore de ky app
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          cd app
+          mkdir -p ../out
+          NEW=0
+          if [ -n "${KEYSTORE_BASE64:-}" ] && [ -n "${KEYSTORE_PASSWORD:-}" ]; then
+            echo "Dung keystore co dinh tu GitHub Secrets (khoa ky giu nguyen qua cac lan build)."
+            printf '%s' "$KEYSTORE_BASE64" | tr -d ' \r\n' | base64 -d > release.keystore
+            PASS="$(printf '%s' "$KEYSTORE_PASSWORD" | tr -d ' \r\n')"
+            echo "::add-mask::$PASS"
+          else
+            NEW=1
+            echo "Chua co Secrets -> tao keystore MOI (chi nen dung cho lan dau)."
+            PASS="$(openssl rand -base64 24 | tr -d '/+=\n' | cut -c1-24)"
+            echo "::add-mask::$PASS"
+            export KS_PASS="$PASS"
+            keytool -genkeypair -noprompt -keystore release.keystore -storetype PKCS12 -alias upload \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass:env KS_PASS -keypass:env KS_PASS \
+              -dname "CN=${PACKAGE_ID}, O=${PACKAGE_ID}, C=VN"
+          fi
+          export KS_PASS="$PASS"
+          # Kiem tra keystore + alias + mat khau dung truoc khi build
+          keytool -list -keystore release.keystore -alias upload -storepass:env KS_PASS > /dev/null \
+            || { echo "Keystore/alias(upload)/mat khau khong khop. Kiem tra lai Secrets."; exit 1; }
+          node -e "require('fs').writeFileSync('build.json', JSON.stringify({android:{release:{keystore:'release.keystore',storePassword:process.env.KS_PASS,alias:'upload',password:process.env.KS_PASS,keystoreType:'PKCS12'}}}))"
+          if [ "$NEW" = "1" ]; then
+            cp release.keystore ../out/release.keystore
+            base64 -w0 release.keystore > ../out/keystore-base64.txt
+            printf 'KEYSTORE MOI - SAO LUU CAN THAN, KHONG CHIA SE\nAlias: upload\nMat khau: %s\n\nDE LAN BUILD SAU DUNG LAI DUNG KHOA KY NAY, tao 2 Secrets trong repo (Settings > Secrets and variables > Actions > New repository secret):\n  KEYSTORE_BASE64   = noi dung file keystore-base64.txt\n  KEYSTORE_PASSWORD = mat khau o tren\n' "$PASS" > ../out/keystore-info.txt
+            echo "::warning::Da tao keystore moi. Tai artifact, tao Secrets KEYSTORE_BASE64 va KEYSTORE_PASSWORD de cac lan build sau dung cung khoa ky (bat buoc de cap nhat app tren Google Play)."
+          fi
+
+      - name: Build APK
+        run: |
+          set -euo pipefail
+          cd app
+          cordova build android --release --buildConfig=build.json -- --packageType=apk
+          APK="$(find platforms/android/app/build/outputs/apk -name '*.apk' ! -name '*unsigned*' ! -name '*debug*' | head -n1)"
+          test -n "$APK"
+          cp "$APK" ../out/app-release.apk
+
+      - name: Build AAB (tuy chon)
+        if: ${{ inputs.build_aab }}
+        run: |
+          set -euo pipefail
+          cd app
+          cordova build android --release --buildConfig=build.json -- --packageType=bundle
+          AAB="$(find platforms/android/app/build/outputs/bundle -name '*.aab' | head -n1)"
+          test -n "$AAB"
+          cp "$AAB" ../out/app-release.aab
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-app
+          path: out/
+          retention-days: 30
