@@ -1,0 +1,211 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "URL website (bat dau bang https://)"
+        required: true
+        type: string
+      app_name:
+        description: "Ten app (toi da 30 ky tu)"
+        required: true
+        type: string
+      package_id:
+        description: "Package ID, vd: com.tenban.cuahang (chu thuong, khong dau)"
+        required: true
+        type: string
+      version_code:
+        description: "Version code (so nguyen, tang moi lan build)"
+        required: true
+        default: "1"
+        type: string
+      build_aab:
+        description: "Build them file AAB de up Google Play"
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SITE_URL: ${{ inputs.url }}
+      APP_NAME: ${{ inputs.app_name }}
+      PACKAGE_ID: ${{ inputs.package_id }}
+      VERSION_CODE: ${{ inputs.version_code }}
+      BUILD_AAB: ${{ inputs.build_aab }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Kiem tra thong tin nhap
+        run: |
+          set -euo pipefail
+          case "$SITE_URL" in https://*) ;; *) echo "URL phai bat dau bang https://"; exit 1;; esac
+          if ! [[ "$PACKAGE_ID" =~ ^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$ ]]; then
+            echo "Package ID khong hop le. Vi du dung: com.tenban.cuahang"; exit 1
+          fi
+          if ! [[ "$VERSION_CODE" =~ ^[0-9]{1,9}$ ]]; then echo "Version code phai la so nguyen"; exit 1; fi
+          if [ "${#APP_NAME}" -gt 30 ] || [ -z "$APP_NAME" ]; then echo "Ten app 1-30 ky tu"; exit 1; fi
+
+      - name: Cai cong cu
+        run: |
+          set -euo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y imagemagick
+          npm install -g cordova
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Tao project Cordova
+        run: |
+          set -euo pipefail
+          cordova create app "$PACKAGE_ID" "$APP_NAME"
+          cd app
+          cordova platform add android@14
+
+      - name: Tao icon
+        run: |
+          set -euo pipefail
+          cd app
+          mkdir -p res/icon
+          if [ -f ../icon.png ]; then
+            SRC=../icon.png
+          else
+            LETTER="$(printf '%s' "${APP_NAME:0:1}" | tr '[:lower:]' '[:upper:]')"
+            convert -size 512x512 "xc:#2563eb" -gravity center -fill white -pointsize 300 -annotate 0 "$LETTER" ../icon-auto.png 2>/dev/null \
+              || convert -size 512x512 "xc:#2563eb" ../icon-auto.png
+            SRC=../icon-auto.png
+          fi
+          for d in mdpi:48 hdpi:72 xhdpi:96 xxhdpi:144 xxxhdpi:192; do
+            n="${d%%:*}"; s="${d#*:}"
+            convert "$SRC" -resize "${s}x${s}^" -gravity center -extent "${s}x${s}" "res/icon/${n}.png"
+          done
+
+      - name: Tao config.xml va trang offline
+        run: |
+          set -euo pipefail
+          cd app
+          node - <<'EOF'
+          const fs = require('fs');
+          const e = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+          const site = new URL(process.env.SITE_URL);
+          if (site.protocol !== 'https:') throw new Error('Chi chap nhan https');
+          const name = process.env.APP_NAME, id = process.env.PACKAGE_ID, code = process.env.VERSION_CODE;
+          const host = site.host;
+          const cfg = `<?xml version='1.0' encoding='utf-8'?>
+          <widget id="${e(id)}" version="1.0.${e(code)}" android-versionCode="${e(code)}" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+            <name>${e(name)}</name>
+            <description>${e(name)}</description>
+            <author>${e(name)}</author>
+            <content src="${e(site.toString())}" />
+            <access origin="https://${e(host)}/*" />
+            <allow-navigation href="https://${e(host)}/*" />
+            <allow-intent href="http://*/*" />
+            <allow-intent href="https://*/*" />
+            <allow-intent href="tel:*" />
+            <allow-intent href="mailto:*" />
+            <preference name="DisallowOverscroll" value="true" />
+            <preference name="AndroidXEnabled" value="true" />
+            <preference name="scheme" value="https" />
+            <preference name="hostname" value="localhost" />
+            <preference name="android-minSdkVersion" value="24" />
+            <preference name="android-targetSdkVersion" value="35" />
+            <preference name="errorUrl" value="https://localhost/offline.html" />
+            <platform name="android">
+              <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+                <application android:hardwareAccelerated="true" android:usesCleartextTraffic="false" android:allowBackup="false" />
+              </edit-config>
+              <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity[@android:name='MainActivity']">
+                <activity android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" />
+              </edit-config>
+              <icon density="mdpi" src="res/icon/mdpi.png" />
+              <icon density="hdpi" src="res/icon/hdpi.png" />
+              <icon density="xhdpi" src="res/icon/xhdpi.png" />
+              <icon density="xxhdpi" src="res/icon/xxhdpi.png" />
+              <icon density="xxxhdpi" src="res/icon/xxxhdpi.png" />
+            </platform>
+          </widget>
+          `;
+          fs.writeFileSync('config.xml', cfg);
+          fs.writeFileSync('www/index.html', `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${e(site.toString())}"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body></body></html>`);
+          const target = JSON.stringify(site.toString()).replace(/</g, '\\u003c');
+          fs.writeFileSync('www/offline.html', `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${e(name)}</title>
+          <style>html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;font:16px system-ui,sans-serif;text-align:center}button{font:inherit;padding:12px 24px;border:0;border-radius:10px;background:#2563eb;color:#fff}</style></head>
+          <body><main><h1>Không có kết nối mạng</h1><p>Hãy kiểm tra mạng rồi thử lại.</p><button id="r">Thử lại</button></main>
+          <script>var t=${target};document.getElementById('r').onclick=function(){location.href=t};addEventListener('online',function(){location.href=t});</script></body></html>`);
+          EOF
+
+      - name: Chuan bi keystore de ky app
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          cd app
+          mkdir -p ../out
+          NEW=0
+          if [ -n "${KEYSTORE_BASE64:-}" ] && [ -n "${KEYSTORE_PASSWORD:-}" ]; then
+            echo "Dung keystore co dinh tu GitHub Secrets (khoa ky giu nguyen qua cac lan build)."
+            printf '%s' "$KEYSTORE_BASE64" | tr -d ' \r\n' | base64 -d > release.keystore
+            PASS="$(printf '%s' "$KEYSTORE_PASSWORD" | tr -d ' \r\n')"
+            echo "::add-mask::$PASS"
+          else
+            NEW=1
+            echo "Chua co Secrets -> tao keystore MOI (chi nen dung cho lan dau)."
+            PASS="$(openssl rand -base64 24 | tr -d '/+=\n' | cut -c1-24)"
+            echo "::add-mask::$PASS"
+            export KS_PASS="$PASS"
+            keytool -genkeypair -noprompt -keystore release.keystore -storetype PKCS12 -alias upload \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass:env KS_PASS -keypass:env KS_PASS \
+              -dname "CN=${PACKAGE_ID}, O=${PACKAGE_ID}, C=VN"
+          fi
+          export KS_PASS="$PASS"
+          # Kiem tra keystore + alias + mat khau dung truoc khi build
+          keytool -list -keystore release.keystore -alias upload -storepass:env KS_PASS > /dev/null \
+            || { echo "Keystore/alias(upload)/mat khau khong khop. Kiem tra lai Secrets."; exit 1; }
+          node -e "require('fs').writeFileSync('build.json', JSON.stringify({android:{release:{keystore:'release.keystore',storePassword:process.env.KS_PASS,alias:'upload',password:process.env.KS_PASS,keystoreType:'PKCS12'}}}))"
+          if [ "$NEW" = "1" ]; then
+            cp release.keystore ../out/release.keystore
+            base64 -w0 release.keystore > ../out/keystore-base64.txt
+            printf 'KEYSTORE MOI - SAO LUU CAN THAN, KHONG CHIA SE\nAlias: upload\nMat khau: %s\n\nDE LAN BUILD SAU DUNG LAI DUNG KHOA KY NAY, tao 2 Secrets trong repo (Settings > Secrets and variables > Actions > New repository secret):\n  KEYSTORE_BASE64   = noi dung file keystore-base64.txt\n  KEYSTORE_PASSWORD = mat khau o tren\n' "$PASS" > ../out/keystore-info.txt
+            echo "::warning::Da tao keystore moi. Tai artifact, tao Secrets KEYSTORE_BASE64 va KEYSTORE_PASSWORD de cac lan build sau dung cung khoa ky (bat buoc de cap nhat app tren Google Play)."
+          fi
+
+      - name: Build APK
+        run: |
+          set -euo pipefail
+          cd app
+          cordova build android --release --buildConfig=build.json -- --packageType=apk
+          APK="$(find platforms/android/app/build/outputs/apk -name '*.apk' ! -name '*unsigned*' ! -name '*debug*' | head -n1)"
+          test -n "$APK"
+          cp "$APK" ../out/app-release.apk
+
+      - name: Build AAB (tuy chon)
+        if: ${{ inputs.build_aab }}
+        run: |
+          set -euo pipefail
+          cd app
+          cordova build android --release --buildConfig=build.json -- --packageType=bundle
+          AAB="$(find platforms/android/app/build/outputs/bundle -name '*.aab' | head -n1)"
+          test -n "$AAB"
+          cp "$AAB" ../out/app-release.aab
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-app
+          path: out/
+          retention-days: 30
