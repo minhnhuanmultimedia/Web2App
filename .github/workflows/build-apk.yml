@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       url:
-        description: "URL website (https://...). De TRONG neu dung file HTML trong thu muc web/ cua repo"
+        description: "URL website (https://...). De TRONG neu dung file index.html trong repo"
         required: false
         default: ""
         type: string
@@ -56,8 +56,8 @@ jobs:
           set -euo pipefail
           if [ -n "$SITE_URL" ]; then
             case "$SITE_URL" in https://*) ;; *) echo "URL phai bat dau bang https://"; exit 1;; esac
-          elif [ ! -f web/index.html ]; then
-            echo "Chua co file web/index.html trong repo. Hay tao file web/index.html (noi dung la trang HTML cua ban) hoac nhap URL."; exit 1
+          elif [ ! -f web/index.html ] && [ ! -f index.html ]; then
+            echo "Chua co file index.html trong repo. Hay tai file index.html len repo hoac nhap URL."; exit 1
           fi
           if ! [[ "$PACKAGE_ID" =~ ^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$ ]]; then
             echo "Package ID khong hop le. Vi du dung: com.tenban.cuahang"; exit 1
@@ -104,9 +104,15 @@ jobs:
           set -euo pipefail
           cd app
           if [ -z "$SITE_URL" ]; then
-            echo "Che do dong goi: dung file HTML trong thu muc web/"
             rm -rf www/*
-            cp -r ../web/. www/
+            if [ -f ../web/index.html ]; then
+              echo "Che do dong goi: dung file trong thu muc web/"
+              cp -r ../web/. www/
+            else
+              echo "Che do dong goi: dung index.html o thu muc goc"
+              find .. -maxdepth 1 -mindepth 1 ! -name .git ! -name .github ! -name app ! -name out \
+                ! -name icon.png ! -name icon-auto.png ! -name README.md -exec cp -r {} www/ \;
+            fi
           fi
           node - <<'EOF'
           const fs = require('fs');
@@ -129,98 +135,4 @@ jobs:
             <allow-intent href="http://*/*" />
             <allow-intent href="https://*/*" />
             <allow-intent href="tel:*" />
-            <allow-intent href="mailto:*" />
-            <preference name="DisallowOverscroll" value="true" />
-            <preference name="AndroidXEnabled" value="true" />
-            <preference name="scheme" value="https" />
-            <preference name="hostname" value="localhost" />
-            <preference name="android-minSdkVersion" value="24" />
-            <preference name="android-targetSdkVersion" value="35" />
-            ${errPref}
-            <platform name="android">
-              <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-                <application android:hardwareAccelerated="true" android:usesCleartextTraffic="false" android:allowBackup="false" />
-              </edit-config>
-              <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity[@android:name='MainActivity']">
-                <activity android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" />
-              </edit-config>
-              <icon density="mdpi" src="res/icon/mdpi.png" />
-              <icon density="hdpi" src="res/icon/hdpi.png" />
-              <icon density="xhdpi" src="res/icon/xhdpi.png" />
-              <icon density="xxhdpi" src="res/icon/xxhdpi.png" />
-              <icon density="xxxhdpi" src="res/icon/xxxhdpi.png" />
-            </platform>
-          </widget>
-          `;
-          fs.writeFileSync('config.xml', cfg);
-          if (hasUrl) {
-          fs.writeFileSync('www/index.html', `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${e(site.toString())}"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body></body></html>`);
-          const target = JSON.stringify(site.toString()).replace(/</g, '\\u003c');
-          fs.writeFileSync('www/offline.html', `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${e(name)}</title>
-          <style>html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;font:16px system-ui,sans-serif;text-align:center}button{font:inherit;padding:12px 24px;border:0;border-radius:10px;background:#2563eb;color:#fff}</style></head>
-          <body><main><h1>Không có kết nối mạng</h1><p>Hãy kiểm tra mạng rồi thử lại.</p><button id="r">Thử lại</button></main>
-          <script>var t=${target};document.getElementById('r').onclick=function(){location.href=t};addEventListener('online',function(){location.href=t});</script></body></html>`);
-          }
-          EOF
-
-      - name: Chuan bi keystore de ky app
-        env:
-          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-        run: |
-          set -euo pipefail
-          cd app
-          mkdir -p ../out
-          NEW=0
-          if [ -n "${KEYSTORE_BASE64:-}" ] && [ -n "${KEYSTORE_PASSWORD:-}" ]; then
-            echo "Dung keystore co dinh tu GitHub Secrets (khoa ky giu nguyen qua cac lan build)."
-            printf '%s' "$KEYSTORE_BASE64" | tr -d ' \r\n' | base64 -d > release.keystore
-            PASS="$(printf '%s' "$KEYSTORE_PASSWORD" | tr -d ' \r\n')"
-            echo "::add-mask::$PASS"
-          else
-            NEW=1
-            echo "Chua co Secrets -> tao keystore MOI (chi nen dung cho lan dau)."
-            PASS="$(openssl rand -base64 24 | tr -d '/+=\n' | cut -c1-24)"
-            echo "::add-mask::$PASS"
-            export KS_PASS="$PASS"
-            keytool -genkeypair -noprompt -keystore release.keystore -storetype PKCS12 -alias upload \
-              -keyalg RSA -keysize 2048 -validity 10000 \
-              -storepass:env KS_PASS -keypass:env KS_PASS \
-              -dname "CN=${PACKAGE_ID}, O=${PACKAGE_ID}, C=VN"
-          fi
-          export KS_PASS="$PASS"
-          # Kiem tra keystore + alias + mat khau dung truoc khi build
-          keytool -list -keystore release.keystore -alias upload -storepass:env KS_PASS > /dev/null \
-            || { echo "Keystore/alias(upload)/mat khau khong khop. Kiem tra lai Secrets."; exit 1; }
-          node -e "require('fs').writeFileSync('build.json', JSON.stringify({android:{release:{keystore:'release.keystore',storePassword:process.env.KS_PASS,alias:'upload',password:process.env.KS_PASS,keystoreType:'PKCS12'}}}))"
-          if [ "$NEW" = "1" ]; then
-            cp release.keystore ../out/release.keystore
-            base64 -w0 release.keystore > ../out/keystore-base64.txt
-            printf 'KEYSTORE MOI - SAO LUU CAN THAN, KHONG CHIA SE\nAlias: upload\nMat khau: %s\n\nDE LAN BUILD SAU DUNG LAI DUNG KHOA KY NAY, tao 2 Secrets trong repo (Settings > Secrets and variables > Actions > New repository secret):\n  KEYSTORE_BASE64   = noi dung file keystore-base64.txt\n  KEYSTORE_PASSWORD = mat khau o tren\n' "$PASS" > ../out/keystore-info.txt
-            echo "::warning::Da tao keystore moi. Tai artifact, tao Secrets KEYSTORE_BASE64 va KEYSTORE_PASSWORD de cac lan build sau dung cung khoa ky (bat buoc de cap nhat app tren Google Play)."
-          fi
-
-      - name: Build APK
-        run: |
-          set -euo pipefail
-          cd app
-          cordova build android --release --buildConfig=build.json -- --packageType=apk
-          APK="$(find platforms/android/app/build/outputs/apk -name '*.apk' ! -name '*unsigned*' ! -name '*debug*' | head -n1)"
-          test -n "$APK"
-          cp "$APK" ../out/app-release.apk
-
-      - name: Build AAB (tuy chon)
-        if: ${{ inputs.build_aab }}
-        run: |
-          set -euo pipefail
-          cd app
-          cordova build android --release --buildConfig=build.json -- --packageType=bundle
-          AAB="$(find platforms/android/app/build/outputs/bundle -name '*.aab' | head -n1)"
-          test -n "$AAB"
-          cp "$AAB" ../out/app-release.aab
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: android-app
-          path: out/
-          retention-days: 30
+            <allow-intent
