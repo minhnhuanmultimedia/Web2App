@@ -175,6 +175,17 @@ textarea.field{min-height:92px;resize:none}
 .cxlog{margin:0;max-height:76px;overflow:auto;font:12.5px/1.5 system-ui,sans-serif;color:var(--cream);white-space:pre-wrap;user-select:none}
 .cxrow{gap:6px}.cxrow .chip{flex:1 1 70px;min-width:0;text-align:center;min-height:38px}
 .tools{display:grid!important;grid-template-columns:1fr 1fr;grid-auto-rows:40px;gap:6px;width:min(276px,64vw)}.tools .btn{padding:0 6px;height:40px;min-height:40px;font-size:13px;display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;overflow:hidden;text-overflow:ellipsis}
+/* nút trong menu hoạt động: không xuống dòng chữ, cho phép xuống hàng cả nút */
+.sheet button,.sheet .big,.chip,.tabs button{white-space:nowrap}
+.sheet .big small{white-space:normal}
+.row>.big{min-width:min-content}
+.row>*,.chips>*{flex:1 1 auto;min-width:max-content}
+.chips>*{flex:0 0 auto}
+.row>.btn,.row>.big{padding-inline:14px}
+.cxrow .chip{flex:1 1 auto;min-width:max-content;padding:6px 10px;font-size:12.5px;overflow:visible}
+#act{white-space:nowrap}
+@media (pointer:coarse){#act{white-space:normal}}
+.dish{white-space:normal}
 </style>
 <script>addEventListener('error',function(e){var f=document.getElementById('fatal'),c=document.getElementById('startCard');if(f){f.hidden=false;f.textContent='Lỗi / Error: '+(e.message||'')+' ('+(e.lineno||'?')+')';if(c)c.hidden=true}});</script>
 
@@ -210,25 +221,25 @@ textarea.field{min-height:92px;resize:none}
     </div>
     <button class="btn primary" id="btnStart" type="button" style="min-height:52px;font-size:17px" disabled>Đang dựng sân chùa…</button>
     <details class="howdet"><summary>Hướng dẫn chơi</summary><ul class="howto">
-      <li><b>Bắt đầu:</b> lại gần một điểm trong sân, nút vàng sẽ hiện ra.</li>
-      <li><b>Lư hương:</b> giữa sân. Chọn 1 hoặc 3 nén; hương cháy khoảng 1,5 phút.</li>
-      <li><b>Gác chuông:</b> bên phải sân. Bấm “Đánh chuông”, rồi chạm “Chạm!” khi vòng sáng co lại chạm vòng vàng. Đúng nhịp thì chuông ngân dài.</li>
-      <li><b>Mõ:</b> bên phải, gần chính điện. Bấm “Bắt đầu”, rồi chạm mõ khi vòng sáng co lại: 40 nhịp trong khoảng 30 giây. Cuối lượt có điểm “Tâm an” trên 100.</li>
-      <li><b>Ống xăm:</b> bàn gỗ bên phải, gần lư hương. Nhấn giữ nút “Chạm giữ để lắc” (hoặc lắc điện thoại) đến khi thanh đầy. Quẻ chỉ để giải trí, lưu trong Sổ cầu an.</li>
-      <li><b>Cây bồ đề và hồ sen:</b> sân trái. Viết lời cầu (tối đa 120 chữ) hoặc chọn chủ đề, rồi treo thành dải lụa đỏ hoặc thả thành hoa đăng.</li>
-      <li><b>Thả đèn MNM:</b> quầy ở sân trái. Viết điều ước (tối đa 80 chữ, có thể bỏ trống), rồi bấm “Thắp đèn và thả”. Đèn bay khoảng 50 giây, camera nhìn theo.</li>
-      <li><b>Phóng sanh:</b> tủ chim ở trái sân, phía trên hồ sen. Chọn 1, 3 hoặc 5 chim, rồi bấm “Mở cửa phóng sanh”. Tủ chứa 6 chim và tự đầy lại dần.</li>
-      <li><b>Chính điện:</b> ngồi thiền ở đệm trống có vòng sáng (chọn 1, 3 hoặc 5 phút; hít vào 4 nhịp, thở ra 6 nhịp theo vòng sáng). Lạy Phật: đứng trên đệm đỏ trước tượng, nhân vật tự lạy ba lạy.</li>
-      <li><b>Cờ tướng:</b> góc sân phải, gần cổng. Hai cao thủ AI (Thiên Phượng cầm quân Đỏ, Huyền Long cầm quân Đen) tự đấu cả ván theo luật cờ tướng. Lại gần bàn, bấm “Xem đấu cờ” để xem từ trên cao, đổi góc nhìn hoặc mở ván mới. Bấm “So tài” để tự cầm quân Đỏ đấu với Huyền Long (chọn mức Dễ, Vừa hoặc Khó), chạm quân rồi chạm ô sáng để đi; chơi hoàn toàn ngoại tuyến.</li>
-      <li><b>Pháo hoa:</b> trạm bắn ở sân trái, ngay cạnh hồ sen. Chọn 1 quả, chùm 5 quả hoặc đại tiệc 10 quả, rồi bấm “Châm ngòi”. Bắn nhiều quả thì luôn có một quả nổ thành chữ MNM, các quả còn lại ngẫu nhiên. Pháo có thể nở thành chữ 福 祿 壽 hoặc nhiều hình: trái tim, ngôi sao, mặt cười, hoa sen, bướm, thiên hà, sao Thổ, trăng khuyết (hình càng lạ càng hiếm).</li>
-      <li><b>Giếng nước và tắm Phật:</b> sân phải, gần cổng. Ở giếng, chạm “Kéo gàu” đều tay khoảng 5 lần để được 3 gáo nước (dừng lâu thì gàu tụt); mang tối đa 6 gáo. Ở đài tắm Phật, chạm “Múc nước rưới tượng” 3 lần, mỗi lần 1 gáo.</li>
-      <li><b>Hồ cá:</b> sau gác chuông. Chạm “Rải thức ăn” để rải vài viên cám cho cá chép. Có 20 phần; hết thì bấm “Lấy thêm thức ăn”.</li>
-      <li><b>Quán chay MNM:</b> góc trái, phía chính điện. Xem thực đơn ở giá bên trái. Ở quầy, chọn tối đa 3 món rồi bấm “Thọ thực”; nhân vật tự ngồi vào bàn. Ăn xong, ra thùng công đức bên phải: trả tùy hỷ 1 món, 3 món hoặc chắp tay cảm ơn; mỗi bữa nhận 3 hạt giống rau. Quầy cơm miễn phí: chạm “Múc cơm” 10 lần để phát 10 suất. Không có giá cố định.</li>
-      <li><b>Vườn rau MNM:</b> sân sau, qua cổng góc đông bắc. Chọn loại hạt trong túi, rồi chạm ô đất trống để gieo (48 ô, 20 loại rau củ). Rau chín sau khoảng 70 giây; cứ 3 phút vườn tự thu hoạch và làm đất lại.</li>
-      <li><b>Sổ cầu an và âm thanh:</b> xem lại lời cầu, quẻ và thống kê trong “Sổ cầu an”. “Âm thanh” bật hoặc tắt tiếng. “Reset” xóa dữ liệu và chơi lại từ đầu.</li>
+      <li><b>Bắt đầu:</b> lại gần một điểm, nút vàng hiện ra.</li>
+      <li><b>Lư hương:</b> giữa sân. Chọn 1 hoặc 3 nén, cháy khoảng 1,5 phút.</li>
+      <li><b>Gác chuông:</b> bên phải sân. Chạm khi vòng sáng khớp vòng vàng; đúng nhịp chuông ngân dài.</li>
+      <li><b>Mõ:</b> bên phải, gần chính điện. Chạm mõ khi vòng sáng khớp: 40 nhịp trong 30 giây, cuối lượt có điểm “Tâm an”.</li>
+      <li><b>Ống xăm:</b> bàn gỗ bên phải, gần lư hương. Giữ nút “Chạm giữ để lắc” (hoặc lắc điện thoại) đến khi đầy thanh. Quẻ chỉ để giải trí, lưu trong Sổ cầu an.</li>
+      <li><b>Cây bồ đề và hồ sen:</b> sân trái. Viết lời cầu (tối đa 120 chữ), rồi treo dải lụa hoặc thả hoa đăng.</li>
+      <li><b>Thả đèn MNM:</b> quầy sân trái. Viết điều ước (tối đa 80 chữ, có thể bỏ trống), bấm “Thắp đèn và thả”. Đèn bay khoảng 50 giây.</li>
+      <li><b>Phóng sanh:</b> tủ chim sân trái, trên hồ sen. Chọn 1, 3 hoặc 5 chim, bấm “Mở cửa phóng sanh”. Tủ chứa 6 chim, tự đầy lại.</li>
+      <li><b>Chính điện:</b> ngồi thiền ở đệm có vòng sáng (1, 3 hoặc 5 phút; hít 4 nhịp, thở ra 6). Lạy Phật: đứng trên đệm đỏ, nhân vật tự lạy ba lạy.</li>
+      <li><b>Cờ tướng:</b> góc sân phải, gần cổng. Hai AI (Thiên Phượng cầm Đỏ, Huyền Long cầm Đen) tự đấu. Bấm “Xem đấu cờ” để xem từ trên cao. Bấm “So tài” để cầm quân Đỏ đấu Huyền Long (Dễ, Vừa, Khó), chạm quân rồi chạm ô sáng để đi. Chơi ngoại tuyến.</li>
+      <li><b>Pháo hoa:</b> trạm bắn sân trái, cạnh hồ sen. Chọn 1, 5 hoặc 10 quả, bấm “Châm ngòi”. Luôn có một quả nổ chữ MNM, còn lại ngẫu nhiên: 福 祿 壽, trái tim, ngôi sao, hoa sen, bướm… (hình càng lạ càng hiếm).</li>
+      <li><b>Giếng nước và tắm Phật:</b> sân phải, gần cổng. Giếng: chạm “Kéo gàu” đều tay khoảng 5 lần được 3 gáo (mang tối đa 6). Đài tắm Phật: chạm “Múc nước rưới tượng” 3 lần.</li>
+      <li><b>Hồ cá:</b> sau gác chuông. Chạm “Rải thức ăn” cho cá chép. Có 20 phần; hết thì bấm “Lấy thêm thức ăn”.</li>
+      <li><b>Quán chay MNM:</b> góc trái, phía chính điện. Xem thực đơn ở giá trái. Ở quầy, chọn tối đa 3 món, bấm “Thọ thực”. Ăn xong, ra thùng công đức: trả tùy hỷ hoặc chắp tay cảm ơn, nhận 3 hạt giống. Quầy miễn phí: chạm “Múc cơm” 10 lần. Không có giá cố định.</li>
+      <li><b>Vườn rau MNM:</b> sân sau, cổng góc đông bắc. Chọn hạt trong túi, chạm ô trống để gieo (48 ô, 20 loại). Rau chín sau khoảng 70 giây; cứ 3 phút vườn tự thu hoạch.</li>
+      <li><b>Sổ cầu an và âm thanh:</b> xem lời cầu, quẻ, thống kê trong “Sổ cầu an”. “Âm thanh” bật/tắt tiếng. “Reset” xóa dữ liệu, chơi lại.</li>
       <li class="credit">Game được thiết kế và phát triển bởi <b>Minh Nhuận Multimedia (MNM)</b>.</li>
     </ul></details>
-    <div class="note">Dữ liệu chỉ lưu trên máy bạn. Không quảng cáo. Thanh toán, mã QR và số liệu công đức chỉ để minh họa, không có giao dịch thật. Trò chơi mang tính giải trí.</div>
+    <div class="note">Dữ liệu chỉ lưu trên máy bạn. Không quảng cáo. Thanh toán, mã QR, số liệu chỉ minh họa. Game mang tính giải trí.</div>
   </div>
   <div id="fatal" hidden></div>
 </section>
@@ -243,14 +254,14 @@ textarea.field{min-height:92px;resize:none}
 </div></div>
 
 <div class="modal" id="mBell"><div class="sheet" role="dialog" aria-label="Thỉnh chuông">
-  <h2>Thỉnh chuông</h2><p class="sub">Chạm khi vòng sáng co lại chạm vòng vàng.</p>
+  <h2>Thỉnh chuông</h2><p class="sub">Chạm khi vòng sáng khớp vòng vàng.</p>
   <div class="ringbox" id="bellBox"><div class="tgt"></div><div class="rg" id="bellRing"></div><div class="say" id="bellMsg"></div></div>
   <div class="row"><button class="btn primary" id="bellGo" type="button" style="min-height:56px;font-size:17px">Đánh chuông</button>
   <button class="btn ghost" id="bellDone" type="button" data-close>Xong</button></div>
 </div></div>
 
 <div class="modal" id="mWood"><div class="sheet" role="dialog" aria-label="Gõ mõ tụng kinh">
-  <h2>Gõ mõ tụng kinh</h2><p class="sub" id="woodSub">Chạm mõ khi vòng sáng co lại. Khoảng 30 giây, thở đều và thư thả.</p>
+  <h2>Gõ mõ tụng kinh</h2><p class="sub" id="woodSub">Chạm mõ khi vòng sáng khớp. Khoảng 30 giây.</p>
   <div class="mo" id="woodBox"><div class="tgt"></div><div class="rg"></div><div class="rg"></div><div class="rg"></div>
     <button id="woodBtn" type="button">Gõ mõ</button><div class="say" id="woodMsg"></div></div>
   <div class="bar" aria-hidden="true"><i id="woodBar"></i></div>
@@ -261,7 +272,7 @@ textarea.field{min-height:92px;resize:none}
 </div></div>
 
 <div class="modal" id="mWish"><div class="sheet" role="dialog" aria-label="Viết lời cầu an">
-  <h2>Viết lời cầu an</h2><p class="sub">Gửi một lời nguyện: gia đình, sức khỏe, thi cử, bình an…</p>
+  <h2>Viết lời cầu an</h2><p class="sub">Gửi một lời nguyện: gia đình, sức khỏe, bình an…</p>
   <div class="chips" id="wishTopics"></div>
   <div><textarea class="field" id="wishText" maxlength="120" placeholder="Cầu cho mọi người trong nhà bình an" aria-label="Lời cầu an"></textarea>
   <div class="count"><span id="wishCount">0</span>/120</div></div>
@@ -275,7 +286,7 @@ textarea.field{min-height:92px;resize:none}
 </div></div>
 
 <div class="modal" id="mFortune"><div class="sheet" role="dialog" aria-label="Xin quẻ đầu năm">
-  <h2>Xin quẻ đầu năm</h2><p class="sub" id="fortSub">Lắc điện thoại hoặc giữ nút bên dưới để lắc ống xăm.</p>
+  <h2>Xin quẻ đầu năm</h2><p class="sub" id="fortSub">Lắc điện thoại hoặc giữ nút bên dưới.</p>
   <div class="tube" id="tube"><svg viewBox="0 0 120 200" aria-hidden="true">
     <g stroke="#e8c98a" stroke-width="5" stroke-linecap="round"><line x1="40" y1="70" x2="36" y2="14"/><line x1="52" y1="70" x2="52" y2="6"/><line x1="64" y1="70" x2="68" y2="12"/><line x1="76" y1="70" x2="84" y2="20"/></g>
     <rect x="28" y="66" width="64" height="124" rx="12" fill="#a9552a" stroke="#6b2f14" stroke-width="3"/>
@@ -297,12 +308,12 @@ textarea.field{min-height:92px;resize:none}
 </div></div>
 
 <div class="modal" id="mGarden"><div class="sheet" role="dialog" aria-label="Vườn rau MNM">
-  <h2>Vườn rau MNM</h2><p class="sub">Gieo hạt nhận từ thùng công đức. Vườn tự thu hoạch và làm đất lại mỗi 3 phút.</p>
+  <h2>Vườn rau MNM</h2><p class="sub">Gieo hạt nhận ở thùng công đức. Vườn tự thu hoạch mỗi 3 phút.</p>
   <div class="stat"><span>Hạt trong túi: <b id="gPack">0</b></span><span>Làm đất lại sau: <b id="gLeft">3:00</b></span></div>
   <div class="chips" id="gKinds"></div>
   <div class="plotGrid" id="plotGrid"></div>
   <div class="say" id="gMsg" style="position:static;min-height:44px;font-size:15px"></div>
-  <div class="note">Hạt giống: ăn chay xong, nhận ở thùng công đức.</div>
+  <div class="note">Hạt giống nhận ở thùng công đức sau bữa chay.</div>
   <button class="btn ghost" type="button" data-close>Đóng</button>
 </div></div>
 
@@ -317,63 +328,63 @@ textarea.field{min-height:92px;resize:none}
 </div></div>
 
 <div class="modal" id="mFirework"><div class="sheet" role="dialog" aria-label="Đốt pháo hoa">
-  <h2>Đốt pháo hoa</h2><p class="sub">Châm ngòi, rồi ngước nhìn pháo hoa nở rộ trên bầu trời.</p>
+  <h2>Đốt pháo hoa</h2><p class="sub">Châm ngòi và ngắm pháo hoa nở.</p>
   <div class="stat"><span>Quả đã bắn: <b id="fwNum">0</b></span></div>
   <div class="chips" id="fwKinds"><button class="chip" type="button" data-n="1" aria-pressed="true">Một quả</button><button class="chip" type="button" data-n="5" aria-pressed="false">Chùm 5 quả</button><button class="chip" type="button" data-n="10" aria-pressed="false">Đại tiệc 10 quả</button></div>
   <div class="row"><button class="btn primary" id="fwGo" type="button" style="min-height:56px;font-size:17px">Châm ngòi</button><button class="btn ghost" type="button" data-close>Để lúc khác</button></div>
-  <div class="note">Pháo hoa trong game chỉ là hình ảnh, không có lửa thật. Ngoài đời, hãy xem pháo hoa ở nơi được tổ chức chính thức.</div>
+  <div class="note">Pháo hoa chỉ là hình ảnh. Ngoài đời, hãy xem ở nơi được tổ chức chính thức.</div>
 </div></div>
 
 <div class="modal" id="mFish"><div class="sheet" role="dialog" aria-label="Cho cá ăn">
-  <h2>Cho cá ăn</h2><p class="sub">Rải cám, bèo và bắp xuống hồ, cá chép sẽ bơi tới ăn.</p>
+  <h2>Cho cá ăn</h2><p class="sub">Rải thức ăn, cá chép sẽ bơi tới.</p>
   <div class="stat"><span>Thức ăn còn: <b id="fishLeft">20</b>/20</span><span>Cá đã ăn: <b id="fishEaten">0</b></span></div>
   <div class="say" id="fishMsg" style="position:static;min-height:44px;font-size:15px"></div>
   <div class="row"><button class="btn primary" id="fishThrow" type="button" style="min-height:56px;font-size:17px">Rải thức ăn</button><button class="btn ghost" type="button" data-close>Đóng</button></div>
-  <div class="note">Chỉ rải từng chút một. Cá no thì để cá nghỉ.</div>
+  <div class="note">Rải từng chút một; cá no thì để cá nghỉ.</div>
 </div></div>
 
 <div class="modal" id="mSky"><div class="sheet" role="dialog" aria-label="Thả đèn MNM">
-  <h2>Thả đèn MNM</h2><p class="sub">Viết điều ước (có thể bỏ trống), thắp đèn rồi thả bay lên.</p>
+  <h2>Thả đèn MNM</h2><p class="sub">Viết điều ước (có thể bỏ trống), thắp đèn rồi thả.</p>
   <div class="chips" id="skyTopics"></div>
   <div><textarea class="field" id="skyText" maxlength="80" placeholder="Nguyện mọi điều lành bay thật xa" aria-label="Điều ước"></textarea>
   <div class="count"><span id="skyCount">0</span>/80</div></div>
   <div class="stat"><span>Đèn đã thả: <b id="skyNum">0</b></span><span>Đèn đang bay: <b id="skyFly">0</b></span></div>
   <div class="err" id="skyErr"></div>
   <div class="row"><button class="btn primary" id="skyGo" type="button" style="min-height:52px">Thắp đèn và thả</button><button class="btn ghost" type="button" data-close>Để lúc khác</button></div>
-  <div class="note">Đèn trong game chỉ là hình ảnh, không có lửa thật. Ngoài đời, chỉ thả đèn ở nơi được phép; nên chọn hoa đăng an toàn.</div>
+  <div class="note">Đèn chỉ là hình ảnh. Ngoài đời, chỉ thả đèn ở nơi được phép; nên chọn hoa đăng.</div>
 </div></div>
 
 <div class="modal" id="mBird"><div class="sheet" role="dialog" aria-label="Phóng sanh chim">
-  <h2>Phóng sanh chim</h2><p class="sub">Chắp tay phát nguyện, rồi mở cửa tủ cho chim bay.</p>
+  <h2>Phóng sanh chim</h2><p class="sub">Chắp tay phát nguyện, rồi mở cửa tủ.</p>
   <div class="stat"><span>Chim trong tủ: <b id="birdStock">6</b>/6</span><span>Bạn đã phóng sanh: <b id="birdTotal">0</b></span></div>
   <div class="chips" id="birdN"></div>
   <div class="msgBand">NGUYỆN CHO MUÔN LOÀI ĐƯỢC TỰ DO, BÌNH AN</div>
   <div class="say" id="birdMsg" style="position:static;min-height:44px;font-size:15px"></div>
   <div class="row"><button class="btn primary" id="birdGo" type="button" style="min-height:56px;font-size:17px">Mở cửa phóng sanh</button><button class="btn ghost" type="button" data-close>Để lúc khác</button></div>
-  <div class="note">Chim trong game chỉ là hình ảnh. Ngoài đời, bắt chim để phóng sanh có thể làm chim bị thương, chết hoặc gây hại hệ sinh thái. Hãy bảo vệ nơi sống của chim và chọn cách làm phước an toàn.</div>
+  <div class="note">Chim chỉ là hình ảnh. Ngoài đời, bắt chim phóng sanh có thể làm chim bị thương, chết và hại hệ sinh thái. Hãy chọn cách làm phước an toàn.</div>
 </div></div>
 
 <div class="modal" id="mWell"><div class="sheet" role="dialog" aria-label="Giếng nước MNM">
-  <h2>Giếng nước MNM</h2><p class="sub">Chạm đều tay để kéo gàu. Mỗi gàu được 3 gáo nước; mang tối đa 6 gáo để tắm Phật.</p>
+  <h2>Giếng nước MNM</h2><p class="sub">Chạm đều tay để kéo gàu: mỗi gàu 3 gáo, mang tối đa 6.</p>
   <div class="bowls water" id="wellDots" aria-hidden="true" style="grid-template-columns:repeat(6,1fr)"></div>
   <div class="stat"><span>Nước đang mang: <b id="wellWater">0</b>/6 gáo</span><span>Đã kéo: <b id="wellDraws">0</b> gàu</span></div>
   <div class="bar" aria-hidden="true"><i id="wellBar"></i></div>
   <div class="say" id="wellMsg" style="position:static;min-height:44px;font-size:15px"></div>
   <div class="row"><button class="btn primary" id="wellPull" type="button" style="min-height:56px;font-size:17px">Kéo gàu</button><button class="btn ghost" type="button" data-close>Đóng</button></div>
-  <div class="note">Dừng tay lâu, gàu sẽ tụt xuống đáy giếng.</div>
+  <div class="note">Dừng lâu, gàu sẽ tụt xuống.</div>
 </div></div>
 
 <div class="modal" id="mBath"><div class="sheet" role="dialog" aria-label="Lễ tắm Phật">
-  <h2>Lễ tắm Phật</h2><p class="sub">Rưới nhẹ nước giếng lên tượng Thái tử Tất Đạt Đa, vừa rưới vừa nguyện gột rửa phiền não. Ba gáo là đủ lễ.</p>
+  <h2>Lễ tắm Phật</h2><p class="sub">Rưới nước giếng lên tượng Thái tử Tất Đạt Đa, nguyện gột rửa phiền não. Ba gáo là đủ lễ.</p>
   <div class="bowls water" id="bathDots" aria-hidden="true" style="grid-template-columns:repeat(3,1fr)"></div>
   <div class="stat"><span>Nước đang mang: <b id="bathWater">0</b> gáo</span><span>Lễ đã làm: <b id="bathCount">0</b></span></div>
   <div class="say" id="bathMsg" style="position:static;min-height:48px;font-size:15px"></div>
   <div class="row"><button class="btn primary" id="bathPour" type="button" style="min-height:56px;font-size:17px">Múc nước rưới tượng</button><button class="btn ghost" type="button" data-close>Đóng</button></div>
-  <div class="note">Hết nước? Ra giếng ở sân phải để kéo thêm.</div>
+  <div class="note">Hết nước? Ra giếng sân phải.</div>
 </div></div>
 
 <div class="modal" id="mMed"><div class="sheet" role="dialog" aria-label="Ngồi thiền">
-  <h2>Ngồi thiền</h2><p class="sub">Ngồi thẳng lưng, thở theo vòng sáng: hít vào bốn nhịp, thở ra sáu nhịp.</p>
+  <h2>Ngồi thiền</h2><p class="sub">Ngồi thẳng lưng, thở theo vòng sáng: hít 4 nhịp, thở ra 6.</p>
   <div class="chips" id="medDur"></div>
   <div class="breath" id="breath" aria-hidden="true"><span id="breathTxt">Sẵn sàng</span></div>
   <div class="stat"><span>Còn lại: <b id="medLeft">3:00</b></span><span>Lần ngồi thiền: <b id="medCount">0</b></span></div>
@@ -385,12 +396,12 @@ textarea.field{min-height:92px;resize:none}
   <div class="seasonNote" id="seasonNote"></div>
   <div class="chips" id="menuCats"></div>
   <div class="dishes" id="menuList"></div>
-  <div class="note">Không có giá cố định: ăn tùy duyên, đóng góp tùy tâm. Nhãn “Vào mùa” là món nhiều rau củ của mùa này.</div>
+  <div class="note">Không có giá cố định: ăn tùy duyên, góp tùy tâm. “Vào mùa” là món nhiều rau củ của mùa này.</div>
   <div class="row"><button class="btn primary" id="menuToMeal" type="button" style="min-height:48px">Đi dùng bữa</button><button class="btn ghost" type="button" data-close>Đóng</button></div>
 </div></div>
 
 <div class="modal" id="mMeal"><div class="sheet" role="dialog" aria-label="Dùng bữa chay">
-  <h2>Thọ thực</h2><p class="sub">Chọn tối đa ba món, không có giá. Nhân vật sẽ tự đến bàn dùng bữa.</p>
+  <h2>Thọ thực</h2><p class="sub">Chọn tối đa 3 món, không có giá. Nhân vật tự đến bàn.</p>
   <div class="chips" id="mealCats"></div>
   <div class="dishes" id="mealList"></div>
   <div class="stat"><span>Đã chọn: <b id="mealCount">0</b>/3</span><span>Phục vụ bình đẳng cho mọi người</span></div>
@@ -403,7 +414,7 @@ textarea.field{min-height:92px;resize:none}
   <div class="msgBand">ĂN BẰNG TÂM LÀNH – GÓP BẰNG TÙY HỶ – LAN TỎA YÊU THƯƠNG</div>
   <div class="qrWrap"><canvas id="qrCv" width="132" height="132" aria-label="Mã QR MNM minh họa"></canvas>
     <ul><li>Không có giá cố định.</li><li>Ăn tùy duyên, đóng góp tùy tâm.</li><li>Không đóng góp vẫn được phục vụ.</li><li>Trả tùy tâm cho món đã dùng: 1 món hoặc 3 món.</li><li>Công khai việc dùng khoản đóng góp định kỳ.</li></ul></div>
-  <div class="note">Mã QR chỉ để minh họa. Quét chỉ ra tên MNM, không chuyển tiền thật.</div>
+  <div class="note">Mã QR chỉ minh họa, không chuyển tiền thật.</div>
   <div class="row"><button class="big" type="button" data-seed="1">Trả tiền 1 món<small>Tùy hỷ, bạn tự chọn số tiền</small></button>
   <button class="big" type="button" data-seed="3">Trả tiền 3 món<small>Tùy hỷ, cho cả bàn hoặc người đến sau</small></button>
   <button class="big" type="button" data-seed="0">Chắp tay cảm ơn<small>Không đóng góp, vẫn được phục vụ</small></button>
@@ -411,12 +422,12 @@ textarea.field{min-height:92px;resize:none}
   <div class="note" id="packNote"></div>
   <div class="stat"><span>Cộng đồng đã trả (món): <b id="seedTotal">0</b></span><span>Của bạn (món): <b id="seedMine">0</b></span></div>
   <div class="ledger" id="ledger" aria-label="Công khai sử dụng công đức (số liệu minh họa)"></div>
-  <div class="note">Số liệu công khai chỉ để minh họa. Ngoài đời, chùa công bố định kỳ tại quầy thực đơn.</div>
+  <div class="note">Số liệu chỉ để minh họa.</div>
   <button class="btn ghost" type="button" data-close>Đóng</button>
 </div></div>
 
 <div class="modal" id="mServe"><div class="sheet" role="dialog" aria-label="Phát cơm chay miễn phí">
-  <h2>Phát cơm chay miễn phí</h2><p class="sub">Cùng tình nguyện viên chia mười suất cơm cho người già, trẻ em và người khó khăn. Chạm “Múc cơm” cho từng suất.</p>
+  <h2>Phát cơm chay miễn phí</h2><p class="sub">Cùng tình nguyện viên chia mười suất cơm. Chạm “Múc cơm” cho từng suất.</p>
   <div class="bowls" id="bowls" aria-hidden="true"></div>
   <div class="bar" aria-hidden="true"><i id="serveBar"></i></div>
   <div class="say" id="serveMsg" style="position:static;min-height:26px;font-size:16px"></div>
@@ -6870,7 +6881,7 @@ function updBellUI(){
 /* 3. Gõ mõ tụng kinh */
 const wood={state:'idle',startT:0,iv:.75,N:40,judged:[],pts:0,good:0};
 const woodRings=[...document.querySelectorAll('#woodBox .rg')],woodMsg=$('#woodMsg');
-function startWood(){openModal('mWood');busy=true;faceTo(WD.x,WD.z);setPose('tap');$('#woodResult').hidden=true;$('#woodStart').hidden=false;$('#woodStart').textContent='Bắt đầu';$('#woodSub').textContent='Chạm mõ khi vòng sáng co lại. Khoảng 30 giây, thở đều và thư thả.';$('#woodBar').style.width='0';$('#woodGood').textContent='0';$('#woodTime').textContent='30 giây';woodMsg.textContent='';wood.state='idle'}
+function startWood(){openModal('mWood');busy=true;faceTo(WD.x,WD.z);setPose('tap');$('#woodResult').hidden=true;$('#woodStart').hidden=false;$('#woodStart').textContent='Bắt đầu';$('#woodSub').textContent='Chạm mõ khi vòng sáng khớp. Khoảng 30 giây.';$('#woodBar').style.width='0';$('#woodGood').textContent='0';$('#woodTime').textContent='30 giây';woodMsg.textContent='';wood.state='idle'}
 $('#woodStart').addEventListener('click',()=>{
   Aud.init();wood.state='play';wood.startT=performance.now()/1000+2.2;wood.judged=new Array(wood.N).fill(false);wood.pts=0;wood.good=0;$('#woodStart').hidden=true;$('#woodResult').hidden=true;woodMsg.textContent='Sẵn sàng…';
   for(let i=0;i<wood.N;i++)Aud.tickAt(2.2+i*wood.iv);
@@ -7346,6 +7357,47 @@ nameIn.addEventListener('keydown',e=>{if(e.key==='Enter')startGame()});
 
 /* ============ Song ngữ vi/en ============ */
 const I18N_MAP={
+"lại gần một điểm, nút vàng hiện ra.": "walk up to a spot and the gold button appears.",
+"giữa sân. Chọn 1 hoặc 3 nén, cháy khoảng 1,5 phút.": "center. Light 1 or 3 sticks; they burn about 1.5 min.",
+"bên phải sân. Chạm khi vòng sáng khớp vòng vàng; đúng nhịp chuông ngân dài.": "right side. Tap when the ring meets the gold ring; on beat, the bell rings long.",
+"bên phải, gần chính điện. Chạm mõ khi vòng sáng khớp: 40 nhịp trong 30 giây, cuối lượt có điểm “Tâm an”.": "right, near the main hall. Tap on beat: 40 beats in 30 s, then a calm score.",
+"bàn gỗ bên phải, gần lư hương. Giữ nút “Chạm giữ để lắc” (hoặc lắc điện thoại) đến khi đầy thanh. Quẻ chỉ để giải trí, lưu trong Sổ cầu an.": "wooden table on the right, near the incense burner. Hold “Hold to shake” (or shake your phone) until the bar fills. Fortunes are for fun, saved in the Prayer Book.",
+"sân trái. Viết lời cầu (tối đa 120 chữ), rồi treo dải lụa hoặc thả hoa đăng.": "left courtyard. Write a wish (max 120 chars), then hang a ribbon or float a lantern.",
+"quầy sân trái. Viết điều ước (tối đa 80 chữ, có thể bỏ trống), bấm “Thắp đèn và thả”. Đèn bay khoảng 50 giây.": "left courtyard stand. Write a wish (max 80 chars, optional), tap “Light and release”. The lantern flies about 50 s.",
+"tủ chim sân trái, trên hồ sen. Chọn 1, 3 hoặc 5 chim, bấm “Mở cửa phóng sanh”. Tủ chứa 6 chim, tự đầy lại.": "bird cage, left courtyard above the lotus pond. Pick 1, 3 or 5 birds, tap “Open the cage”. It holds 6 and refills.",
+"ngồi thiền ở đệm có vòng sáng (1, 3 hoặc 5 phút; hít 4 nhịp, thở ra 6). Lạy Phật: đứng trên đệm đỏ, nhân vật tự lạy ba lạy.": "meditate on a glowing cushion (1, 3 or 5 min; inhale 4, exhale 6). Bow: stand on the red cushion and the character bows three times.",
+"góc sân phải, gần cổng. Hai AI (Thiên Phượng cầm Đỏ, Huyền Long cầm Đen) tự đấu. Bấm “Xem đấu cờ” để xem từ trên cao. Bấm “So tài” để cầm quân Đỏ đấu Huyền Long (Dễ, Vừa, Khó), chạm quân rồi chạm ô sáng để đi. Chơi ngoại tuyến.": "right courtyard corner, near the gate. Two AIs (Phoenix plays Red, Dark Dragon plays Black) play on their own. Tap “Watch the match” for a top view. Tap “Face off” to play Red against Dark Dragon (Easy, Medium, Hard): tap a piece, then a lit square. Works offline.",
+"trạm bắn sân trái, cạnh hồ sen. Chọn 1, 5 hoặc 10 quả, bấm “Châm ngòi”. Luôn có một quả nổ chữ MNM, còn lại ngẫu nhiên: 福 祿 壽, trái tim, ngôi sao, hoa sen, bướm… (hình càng lạ càng hiếm).": "launch pad, left courtyard by the lotus pond. Pick 1, 5 or 10 shells, tap “Light the fuse”. One always bursts into MNM; the rest are random: 福 祿 壽, heart, star, lotus, butterfly… (stranger shapes are rarer).",
+"sân phải, gần cổng. Giếng: chạm “Kéo gàu” đều tay khoảng 5 lần được 3 gáo (mang tối đa 6). Đài tắm Phật: chạm “Múc nước rưới tượng” 3 lần.": "right courtyard, near the gate. Well: tap “Pull bucket” steadily about 5 times for 3 scoops (carry up to 6). Bathing stand: tap “Pour water” 3 times.",
+"sau gác chuông. Chạm “Rải thức ăn” cho cá chép. Có 20 phần; hết thì bấm “Lấy thêm thức ăn”.": "behind the bell tower. Tap “Scatter food” for the carp. There are 20 portions; when out, tap “Get more food”.",
+"góc trái, phía chính điện. Xem thực đơn ở giá trái. Ở quầy, chọn tối đa 3 món, bấm “Thọ thực”. Ăn xong, ra thùng công đức: trả tùy hỷ hoặc chắp tay cảm ơn, nhận 3 hạt giống. Quầy miễn phí: chạm “Múc cơm” 10 lần. Không có giá cố định.": "left corner, toward the main hall. See the menu on the left stand. At the counter pick up to 3 dishes, tap “Eat”. Afterwards go to the donation box: pay what you wish or just give thanks, and get 3 seeds. Free rice counter: tap “Serve rice” 10 times. No fixed prices.",
+"sân sau, cổng góc đông bắc. Chọn hạt trong túi, chạm ô trống để gieo (48 ô, 20 loại). Rau chín sau khoảng 70 giây; cứ 3 phút vườn tự thu hoạch.": "back courtyard, through the northeast gate. Pick seeds from your bag, tap an empty plot to sow (48 plots, 20 crops). Crops ripen in about 70 s; every 3 min the garden auto-harvests.",
+"xem lời cầu, quẻ, thống kê trong “Sổ cầu an”. “Âm thanh” bật/tắt tiếng. “Reset” xóa dữ liệu, chơi lại.": "see wishes, fortunes and stats in “Prayer Book”. “Sound” toggles audio. “Reset” erases data and restarts.",
+"Chạm khi vòng sáng khớp vòng vàng.": "Tap when the ring meets the gold ring.",
+"Chạm mõ khi vòng sáng khớp. Khoảng 30 giây.": "Tap the fish on beat. About 30 seconds.",
+"Gửi một lời nguyện: gia đình, sức khỏe, bình an…": "Send a wish: family, health, peace…",
+"Lắc điện thoại hoặc giữ nút bên dưới.": "Shake your phone or hold the button below.",
+"Gieo hạt nhận ở thùng công đức. Vườn tự thu hoạch mỗi 3 phút.": "Sow seeds from the donation box. The garden auto-harvests every 3 min.",
+"Hạt giống nhận ở thùng công đức sau bữa chay.": "Seeds come from the donation box after a vegetarian meal.",
+"Châm ngòi và ngắm pháo hoa nở.": "Light the fuse and watch the fireworks bloom.",
+"Pháo hoa chỉ là hình ảnh. Ngoài đời, hãy xem ở nơi được tổ chức chính thức.": "Fireworks here are images only. In real life, watch at official shows.",
+"Rải thức ăn, cá chép sẽ bơi tới.": "Scatter food and the carp swim over.",
+"Rải từng chút một; cá no thì để cá nghỉ.": "Scatter a little at a time; let full fish rest.",
+"Viết điều ước (có thể bỏ trống), thắp đèn rồi thả.": "Write a wish (optional), light the lantern and release.",
+"Đèn chỉ là hình ảnh. Ngoài đời, chỉ thả đèn ở nơi được phép; nên chọn hoa đăng.": "Lanterns here are images only. In real life, release only where allowed; prefer safe floating lanterns.",
+"Chắp tay phát nguyện, rồi mở cửa tủ.": "Join your palms, make a vow, then open the cage.",
+"Chim chỉ là hình ảnh. Ngoài đời, bắt chim phóng sanh có thể làm chim bị thương, chết và hại hệ sinh thái. Hãy chọn cách làm phước an toàn.": "Birds here are images only. In real life, catching birds to release can injure or kill them and harm ecosystems. Choose safe ways to do good.",
+"Chạm đều tay để kéo gàu: mỗi gàu 3 gáo, mang tối đa 6.": "Tap steadily to pull the bucket: 3 scoops per pull, carry up to 6.",
+"Dừng lâu, gàu sẽ tụt xuống.": "Pause too long and the bucket sinks.",
+"Rưới nước giếng lên tượng Thái tử Tất Đạt Đa, nguyện gột rửa phiền não. Ba gáo là đủ lễ.": "Pour well water over the statue of Prince Siddhartha, vowing to wash away worries. Three scoops complete the rite.",
+"Hết nước? Ra giếng sân phải.": "Out of water? Go to the right-hand well.",
+"Ngồi thẳng lưng, thở theo vòng sáng: hít 4 nhịp, thở ra 6.": "Sit tall and breathe with the ring: in for 4, out for 6.",
+"Không có giá cố định: ăn tùy duyên, góp tùy tâm. “Vào mùa” là món nhiều rau củ của mùa này.": "No fixed prices: eat as you wish, give as you wish. “In season” marks dishes rich in this season’s vegetables.",
+"Chọn tối đa 3 món, không có giá. Nhân vật tự đến bàn.": "Pick up to 3 dishes, no prices. The character walks to the table.",
+"Mã QR chỉ minh họa, không chuyển tiền thật.": "The QR code is illustrative; no real transfer.",
+"Số liệu chỉ để minh họa.": "Figures are illustrative.",
+"Cùng tình nguyện viên chia mười suất cơm. Chạm “Múc cơm” cho từng suất.": "Share ten meals with the volunteers. Tap “Serve rice” for each.",
+"Dữ liệu chỉ lưu trên máy bạn. Không quảng cáo. Thanh toán, mã QR, số liệu chỉ minh họa. Game mang tính giải trí.": "Data stays on your device. No ads. Payments, QR codes and figures are illustrative. For entertainment.",
 "Chùa online MNM": "MNM Online Temple",
 "Hôm nay có 0 người lên chùa cầu an": "Today 0 people have come to the temple to pray",
 "Reset": "Reset",
@@ -7396,7 +7448,7 @@ const I18N_MAP={
 "Thức ăn còn:": "Food left:",
 "Cá đã ăn:": "Fish fed:",
 "Rải thức ăn": "Scatter food",
-"Chỉ rải từng chút một. Cá no thì để cá nghỉ.": "Scatter only a little at a time. When the fish are full, let them rest.",
+
 "Thả đèn MNM": "Release sky lantern",
 "Đèn đã thả:": "Lanterns released:",
 "Đèn đang bay:": "Lanterns flying:",
@@ -7417,7 +7469,7 @@ const I18N_MAP={
 "Lễ đã làm:": "Ceremonies done:",
 "Múc nước rưới tượng": "Scoop water and pour",
 "Ngồi thiền": "Meditate",
-"Ngồi thẳng lưng, thở theo vòng sáng: hít vào bốn nhịp, thở ra sáu nhịp.": "Sit up straight and breathe with the glowing ring: inhale four beats, exhale six.",
+
 "Sẵn sàng": "Ready",
 "Còn lại:": "Time left:",
 "Lần ngồi thiền:": "Meditation sessions:",
@@ -7441,7 +7493,7 @@ const I18N_MAP={
 "Cộng đồng đã trả (món):": "Community paid (dishes):",
 "Của bạn (món):": "Yours (dishes):",
 "Phát cơm chay miễn phí": "Free vegetarian rice",
-"Cùng tình nguyện viên chia mười suất cơm cho người già, trẻ em và người khó khăn. Chạm “Múc cơm” cho từng suất.": "Join the volunteers to serve ten portions of rice to the elderly, children and those in need. Tap “Serve rice” for each portion.",
+
 "Múc cơm": "Serve rice",
 "Treo dải lụa cầu an": "Hang a prayer ribbon",
 "Thả hoa đăng cầu an": "Float a lotus lantern",
@@ -7483,13 +7535,13 @@ const I18N_MAP={
 "Thiên Phượng (Đỏ)": "Sky Phoenix (Red)",
 "Huyền Long (Đen)": "Dark Dragon (Black)",
 "Đốt pháo hoa": "Set off fireworks",
-"Châm ngòi, rồi ngước nhìn pháo hoa nở rộ trên bầu trời.": "Light the fuse, then look up as fireworks bloom across the sky.",
+
 "Quả đã bắn:": "Shots fired:",
 "Một quả": "One shot",
 "Chùm 5 quả": "Volley of 5",
 "Đại tiệc 10 quả": "Grand show (10)",
 "Châm ngòi": "Light the fuse",
-"Pháo hoa trong game chỉ là hình ảnh, không có lửa thật. Ngoài đời, hãy xem pháo hoa ở nơi được tổ chức chính thức.": "Fireworks in the game are images only, with no real fire. In real life, watch fireworks at officially organised shows.",
+
 "Nguyện cho mọi điều tốt đẹp nở rộ như pháo hoa.": "May every good thing bloom like fireworks.",
 "Sẵn sàng khi bạn muốn": "Ready when you are",
 "Chạm khi vòng sáng chạm vòng vàng": "Tap when the ring meets the gold ring",
@@ -7687,63 +7739,63 @@ const I18N_MAP={
 "Công khai sử dụng công đức (số liệu minh họa)": "Donation use disclosure (illustrative figures)",
 "Logo Quán chay MNM": "MNM Vegetarian Restaurant logo",
 "Bắt đầu:": "Start:",
-"lại gần một điểm trong sân, nút vàng sẽ hiện ra.": "walk up to a spot in the courtyard and the gold button appears.",
+
 "Lư hương:": "Incense burner:",
-"giữa sân. Chọn 1 hoặc 3 nén; hương cháy khoảng 1,5 phút.": "center of the courtyard. Light 1 or 3 sticks; they burn for about 1.5 minutes.",
+
 "Gác chuông:": "Bell tower:",
-"bên phải sân. Bấm “Đánh chuông”, rồi chạm “Chạm!” khi vòng sáng co lại chạm vòng vàng. Đúng nhịp thì chuông ngân dài.": "right side. Tap “Ring the bell”, then tap “Tap!” when the shrinking ring meets the gold ring. On beat, the bell rings long.",
+
 "Mõ:": "Wooden fish:",
-"bên phải, gần chính điện. Bấm “Bắt đầu”, rồi chạm mõ khi vòng sáng co lại: 40 nhịp trong khoảng 30 giây. Cuối lượt có điểm “Tâm an” trên 100.": "right side, near the main hall. Tap “Start”, then tap the fish as the ring shrinks: 40 beats in about 30 seconds. You get a “Peace of mind” score out of 100.",
+
 "Ống xăm:": "Fortune sticks:",
-"bàn gỗ bên phải, gần lư hương. Nhấn giữ nút “Chạm giữ để lắc” (hoặc lắc điện thoại) đến khi thanh đầy. Quẻ chỉ để giải trí, lưu trong Sổ cầu an.": "wooden table on the right, near the incense burner. Press and hold “Hold to shake” (or shake your phone) until the bar fills. Fortunes are for fun and saved in the Prayer Book.",
+
 "Cây bồ đề và hồ sen:": "Bodhi tree and lotus pond:",
-"sân trái. Viết lời cầu (tối đa 120 chữ) hoặc chọn chủ đề, rồi treo thành dải lụa đỏ hoặc thả thành hoa đăng.": "left courtyard. Write a prayer (up to 120 characters) or pick a topic, then hang it as a red ribbon or float it as a lotus lantern.",
+
 "Thả đèn MNM:": "Sky lantern:",
-"quầy ở sân trái. Viết điều ước (tối đa 80 chữ, có thể bỏ trống), rồi bấm “Thắp đèn và thả”. Đèn bay khoảng 50 giây, camera nhìn theo.": "stall in the left courtyard. Write a wish (up to 80 characters, optional), then tap “Light and release”. The lantern rises for about 50 seconds and the camera follows.",
+
 "Phóng sanh:": "Bird release:",
-"tủ chim ở trái sân, phía trên hồ sen. Chọn 1, 3 hoặc 5 chim, rồi bấm “Mở cửa phóng sanh”. Tủ chứa 6 chim và tự đầy lại dần.": "bird cage on the left side, above the lotus pond. Choose 1, 3 or 5 birds, then tap “Open the cage”. The cage holds 6 birds and refills over time.",
+
 "Chính điện:": "Main hall:",
-"ngồi thiền ở đệm trống có vòng sáng (chọn 1, 3 hoặc 5 phút; hít vào 4 nhịp, thở ra 6 nhịp theo vòng sáng). Lạy Phật: đứng trên đệm đỏ trước tượng, nhân vật tự lạy ba lạy.": "meditate on the empty cushion with the glowing ring (choose 1, 3 or 5 minutes; inhale 4 beats, exhale 6, following the ring). Bowing: stand on the red mat before the statue and the character bows three times.",
+
 "Cờ tướng:": "Xiangqi:",
-"góc sân phải, gần cổng. Hai cao thủ AI (Thiên Phượng cầm quân Đỏ, Huyền Long cầm quân Đen) tự đấu cả ván theo luật cờ tướng. Lại gần bàn, bấm “Xem đấu cờ” để xem từ trên cao, đổi góc nhìn hoặc mở ván mới. Bấm “So tài” để tự cầm quân Đỏ đấu với Huyền Long (chọn mức Dễ, Vừa hoặc Khó), chạm quân rồi chạm ô sáng để đi; chơi hoàn toàn ngoại tuyến.": "right corner of the courtyard, near the gate. Two AI masters (Sky Phoenix plays Red, Dark Dragon plays Black) play full games by xiangqi rules. Walk up to the board and tap “Watch match” to view from above, change the view or start a new game. Tap “Play AI” to take the Red side against Dark Dragon (Easy, Medium or Hard): tap a piece, then a glowing square to move. It all works offline.",
+
 "Pháo hoa:": "Fireworks:",
-"trạm bắn ở sân trái, ngay cạnh hồ sen. Chọn 1 quả, chùm 5 quả hoặc đại tiệc 10 quả, rồi bấm “Châm ngòi”. Bắn nhiều quả thì luôn có một quả nổ thành chữ MNM, các quả còn lại ngẫu nhiên. Pháo có thể nở thành chữ 福 祿 壽 hoặc nhiều hình: trái tim, ngôi sao, mặt cười, hoa sen, bướm, thiên hà, sao Thổ, trăng khuyết (hình càng lạ càng hiếm).": "launch spot in the left courtyard, right next to the lotus pond. Choose one shot, a volley of 5 or the grand show of 10, then tap “Light the fuse”. Bigger shows always include one burst spelling MNM, and the rest are random. Fireworks can bloom into the characters 福 祿 壽 or shapes: hearts, stars, smiley faces, lotus flowers, butterflies, galaxies, Saturn and crescent moons (the stranger the shape, the rarer).",
+
 "Giếng nước và tắm Phật:": "Well and Buddha bathing:",
-"sân phải, gần cổng. Ở giếng, chạm “Kéo gàu” đều tay khoảng 5 lần để được 3 gáo nước (dừng lâu thì gàu tụt); mang tối đa 6 gáo. Ở đài tắm Phật, chạm “Múc nước rưới tượng” 3 lần, mỗi lần 1 gáo.": "right courtyard, near the gate. At the well, tap “Pull bucket” steadily about 5 times to get 3 scoops (pause too long and the bucket drops); carry up to 6. At the bathing altar, tap “Scoop water and pour” 3 times, 1 scoop each.",
+
 "Hồ cá:": "Fish pond:",
-"sau gác chuông. Chạm “Rải thức ăn” để rải vài viên cám cho cá chép. Có 20 phần; hết thì bấm “Lấy thêm thức ăn”.": "behind the bell tower. Tap “Scatter food” to drop a few pellets for the carp. There are 20 portions; when out, tap “Get more food”.",
+
 "Quán chay MNM:": "MNM Vegetarian Restaurant:",
-"góc trái, phía chính điện. Xem thực đơn ở giá bên trái. Ở quầy, chọn tối đa 3 món rồi bấm “Thọ thực”; nhân vật tự ngồi vào bàn. Ăn xong, ra thùng công đức bên phải: trả tùy hỷ 1 món, 3 món hoặc chắp tay cảm ơn; mỗi bữa nhận 3 hạt giống rau. Quầy cơm miễn phí: chạm “Múc cơm” 10 lần để phát 10 suất. Không có giá cố định.": "left corner, near the main hall. See the menu on the left board. At the counter, pick up to 3 dishes and tap “Dine”; the character sits at a table. After eating, go to the donation box on the right: pay as you wish for 1 dish or 3 dishes, or just say thanks; each meal earns 3 vegetable seeds. Free rice stall: tap “Serve rice” 10 times to serve 10 portions. No fixed prices.",
+
 "Vườn rau MNM:": "MNM Vegetable Garden:",
-"sân sau, qua cổng góc đông bắc. Chọn loại hạt trong túi, rồi chạm ô đất trống để gieo (48 ô, 20 loại rau củ). Rau chín sau khoảng 70 giây; cứ 3 phút vườn tự thu hoạch và làm đất lại.": "back courtyard, through the north-east gate. Pick a seed from your bag, then tap an empty plot to sow (48 plots, 20 vegetables). Crops ripen in about 70 seconds; every 3 minutes the garden harvests and resets.",
+
 "Sổ cầu an và âm thanh:": "Prayer Book and sound:",
-"xem lại lời cầu, quẻ và thống kê trong “Sổ cầu an”. “Âm thanh” bật hoặc tắt tiếng. “Reset” xóa dữ liệu và chơi lại từ đầu.": "review your prayers, fortunes and stats in the “Prayer Book”. “Sound” toggles audio. “Reset” erases your data and starts over.",
-"Dữ liệu chỉ lưu trên máy bạn. Không quảng cáo. Thanh toán, mã QR và số liệu công đức chỉ để minh họa, không có giao dịch thật. Trò chơi mang tính giải trí.": "Data is stored only on your device. No ads. Payments, QR codes and donation figures are for illustration only; no real transactions. This game is for entertainment.",
+
+
 "Chọn số nén hương.": "Choose how many incense sticks.",
-"Chạm khi vòng sáng co lại chạm vòng vàng.": "Tap when the shrinking ring meets the gold ring.",
-"Chạm mõ khi vòng sáng co lại. Khoảng 30 giây, thở đều và thư thả.": "Tap the fish as the ring shrinks. About 30 seconds; breathe slowly and evenly.",
-"Gửi một lời nguyện: gia đình, sức khỏe, thi cử, bình an…": "Send a wish for family, health, exams, peace…",
-"Lắc điện thoại hoặc giữ nút bên dưới để lắc ống xăm.": "Shake your phone or hold the button below to shake the sticks.",
-"Gieo hạt nhận từ thùng công đức. Vườn tự thu hoạch và làm đất lại mỗi 3 phút.": "Sow seeds from the donation box. The garden harvests and resets every 3 minutes.",
-"Hạt giống: ăn chay xong, nhận ở thùng công đức.": "Seeds: finish a vegetarian meal, then collect them at the donation box.",
-"Rải cám, bèo và bắp xuống hồ, cá chép sẽ bơi tới ăn.": "Scatter bran, duckweed and corn into the pond; the carp swim over to eat.",
-"Viết điều ước (có thể bỏ trống), thắp đèn rồi thả bay lên.": "Write a wish (optional), light the lantern and let it rise.",
-"Đèn trong game chỉ là hình ảnh, không có lửa thật. Ngoài đời, chỉ thả đèn ở nơi được phép; nên chọn hoa đăng an toàn.": "Lanterns in the game are images only, with no real fire. In real life, release lanterns only where permitted, and prefer safe floating lanterns.",
-"Chắp tay phát nguyện, rồi mở cửa tủ cho chim bay.": "Join your palms, make a vow, then open the cage and let the birds fly.",
-"Chim trong game chỉ là hình ảnh. Ngoài đời, bắt chim để phóng sanh có thể làm chim bị thương, chết hoặc gây hại hệ sinh thái. Hãy bảo vệ nơi sống của chim và chọn cách làm phước an toàn.": "Birds in the game are images only. In real life, catching birds to release them can injure or kill them, or harm the ecosystem. Protect bird habitats and choose safe ways to make merit.",
-"Chạm đều tay để kéo gàu. Mỗi gàu được 3 gáo nước; mang tối đa 6 gáo để tắm Phật.": "Tap steadily to pull the bucket up. Each bucket gives 3 scoops; carry up to 6 to bathe the Buddha.",
-"Dừng tay lâu, gàu sẽ tụt xuống đáy giếng.": "Pause too long and the bucket drops to the bottom of the well.",
-"Rưới nhẹ nước giếng lên tượng Thái tử Tất Đạt Đa, vừa rưới vừa nguyện gột rửa phiền não. Ba gáo là đủ lễ.": "Gently pour well water over the statue of Prince Siddhartha, vowing to wash away your troubles. Three scoops complete the ceremony.",
-"Hết nước? Ra giếng ở sân phải để kéo thêm.": "Out of water? Go to the well in the right courtyard for more.",
-"Không có giá cố định: ăn tùy duyên, đóng góp tùy tâm. Nhãn “Vào mùa” là món nhiều rau củ của mùa này.": "No fixed prices: eat as you need, give as you wish. The “In season” tag marks dishes rich in this season’s vegetables.",
-"Chọn tối đa ba món, không có giá. Nhân vật sẽ tự đến bàn dùng bữa.": "Choose up to three dishes. No prices. The character walks to a table to eat.",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "Ăn tùy duyên, đóng góp tùy tâm.": "Eat as you need, give as you wish.",
 "Trả tùy tâm cho món đã dùng: 1 món hoặc 3 món.": "Pay as you wish for what you ate: 1 dish or 3 dishes.",
 "Công khai việc dùng khoản đóng góp định kỳ.": "Donation use is disclosed regularly.",
-"Mã QR chỉ để minh họa. Quét chỉ ra tên MNM, không chuyển tiền thật.": "The QR code is for illustration only. It scans to the MNM name; no real money transfers.",
+
 "Tùy hỷ, bạn tự chọn số tiền": "Your choice of amount",
 "Nhận sau khi dùng bữa chay": "Available after a vegetarian meal",
-"Số liệu công khai chỉ để minh họa. Ngoài đời, chùa công bố định kỳ tại quầy thực đơn.": "Disclosure figures are illustrative. In real life, the temple publishes them regularly at the menu counter.",
+
 "Đã thắp một nén hương. Nguyện lòng bình an.": "One incense stick lit. May your heart be at peace.",
 "Đã thắp ba nén hương. Nguyện lòng bình an.": "Three incense sticks lit. May your heart be at peace.",
 "Tối đa ba món. Hãy bỏ bớt một món để chọn món khác.": "Three dishes at most. Remove one to pick another.",
