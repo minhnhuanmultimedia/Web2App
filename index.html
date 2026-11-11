@@ -173,7 +173,7 @@ textarea.field{min-height:92px;resize:none}
 .cxbar{height:8px;border-radius:6px;background:#26303f;overflow:hidden}.cxbar i{display:block;height:100%;width:50%;background:linear-gradient(90deg,#d9503a,#f08a5a);transition:width .6s}
 .cxnow{font-weight:700;color:var(--gold2);font-size:14.5px}.cxinfo{font-size:12.5px;color:var(--mut)}
 .cxlog{margin:0;max-height:76px;overflow:auto;font:12.5px/1.5 system-ui,sans-serif;color:var(--cream);white-space:pre-wrap;user-select:none}
-.cxrow .chip{flex:1;min-width:0;text-align:center;min-height:38px}
+.cxrow{gap:6px}.cxrow .chip{flex:1 1 70px;min-width:0;text-align:center;min-height:38px}
 .tools{display:grid!important;grid-template-columns:1fr 1fr;grid-auto-rows:40px;gap:6px;width:min(276px,64vw)}.tools .btn{padding:0 6px;height:40px;min-height:40px;font-size:13px;display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;overflow:hidden;text-overflow:ellipsis}
 </style>
 <script>addEventListener('error',function(e){var f=document.getElementById('fatal'),c=document.getElementById('startCard');if(f){f.hidden=false;f.textContent='Lỗi / Error: '+(e.message||'')+' ('+(e.lineno||'?')+')';if(c)c.hidden=true}});</script>
@@ -219,8 +219,8 @@ textarea.field{min-height:92px;resize:none}
       <li><b>Thả đèn MNM:</b> quầy ở sân trái. Viết điều ước (tối đa 80 chữ, có thể bỏ trống), rồi bấm “Thắp đèn và thả”. Đèn bay khoảng 50 giây, camera nhìn theo.</li>
       <li><b>Phóng sanh:</b> tủ chim ở trái sân, phía trên hồ sen. Chọn 1, 3 hoặc 5 chim, rồi bấm “Mở cửa phóng sanh”. Tủ chứa 6 chim và tự đầy lại dần.</li>
       <li><b>Chính điện:</b> ngồi thiền ở đệm trống có vòng sáng (chọn 1, 3 hoặc 5 phút; hít vào 4 nhịp, thở ra 6 nhịp theo vòng sáng). Lạy Phật: đứng trên đệm đỏ trước tượng, nhân vật tự lạy ba lạy.</li>
-      <li><b>Cờ tướng:</b> góc sân phải, gần cổng. Hai cao thủ AI (Thiên Phượng cầm quân Đỏ, Huyền Long cầm quân Đen) tự đấu cả ván theo luật cờ tướng. Lại gần bàn, bấm “Xem đánh cờ” để xem từ trên cao, đổi tốc độ, góc nhìn hoặc mở ván mới.</li>
-      <li><b>Pháo hoa:</b> trạm bắn ở sân trái, ngay cạnh hồ sen. Chọn 1 quả, chùm 5 quả hoặc đại tiệc 10 quả, rồi bấm “Châm ngòi”. Bắn nhiều quả thì pháo nổ thành chữ 福 祿 壽, đôi khi là MNM.</li>
+      <li><b>Cờ tướng:</b> góc sân phải, gần cổng. Hai cao thủ AI (Thiên Phượng cầm quân Đỏ, Huyền Long cầm quân Đen) tự đấu cả ván theo luật cờ tướng. Lại gần bàn, bấm “Xem đấu cờ” để xem từ trên cao, đổi góc nhìn hoặc mở ván mới. Bấm “So tài” để tự cầm quân Đỏ đấu với Huyền Long (chọn mức Dễ, Vừa hoặc Khó), chạm quân rồi chạm ô sáng để đi; chơi hoàn toàn ngoại tuyến.</li>
+      <li><b>Pháo hoa:</b> trạm bắn ở sân trái, ngay cạnh hồ sen. Chọn 1 quả, chùm 5 quả hoặc đại tiệc 10 quả, rồi bấm “Châm ngòi”. Bắn nhiều quả thì luôn có một quả nổ thành chữ MNM, các quả còn lại ngẫu nhiên. Pháo có thể nở thành chữ 福 祿 壽 hoặc nhiều hình: trái tim, ngôi sao, mặt cười, hoa sen, bướm, thiên hà, sao Thổ, trăng khuyết (hình càng lạ càng hiếm).</li>
       <li><b>Giếng nước và tắm Phật:</b> sân phải, gần cổng. Ở giếng, chạm “Kéo gàu” đều tay khoảng 5 lần để được 3 gáo nước (dừng lâu thì gàu tụt); mang tối đa 6 gáo. Ở đài tắm Phật, chạm “Múc nước rưới tượng” 3 lần, mỗi lần 1 gáo.</li>
       <li><b>Hồ cá:</b> sau gác chuông. Chạm “Rải thức ăn” để rải vài viên cám cho cá chép. Có 20 phần; hết thì bấm “Lấy thêm thức ăn”.</li>
       <li><b>Quán chay MNM:</b> góc trái, phía chính điện. Xem thực đơn ở giá bên trái. Ở quầy, chọn tối đa 3 món rồi bấm “Thọ thực”; nhân vật tự ngồi vào bàn. Ăn xong, ra thùng công đức bên phải: trả tùy hỷ 1 món, 3 món hoặc chắp tay cảm ơn; mỗi bữa nhận 3 hạt giống rau. Quầy cơm miễn phí: chạm “Múc cơm” 10 lần để phát 10 suất. Không có giá cố định.</li>
@@ -312,7 +312,7 @@ textarea.field{min-height:92px;resize:none}
   <div class="cxnow" id="cxNow">Đang chuẩn bị ván cờ…</div>
   <div class="cxinfo" id="cxInfo"></div>
   <pre class="cxlog" id="cxLog"></pre>
-  <div class="row cxrow"><button class="chip" type="button" id="cxSpeed">Tốc độ ×1</button><button class="chip" type="button" id="cxView">Góc nhìn: 3D</button><button class="chip" type="button" id="cxNew">Ván mới</button></div>
+  <div class="row cxrow"><button class="chip" type="button" id="cxVs" aria-pressed="false">So tài</button><button class="chip" type="button" id="cxLevel" hidden>Mức: Vừa</button><button class="chip" type="button" id="cxView">Góc nhìn: 3D</button><button class="chip" type="button" id="cxNew">Ván mới</button></div>
   <div class="cxinfo" id="cxTally"></div>
 </div></div>
 
@@ -5773,6 +5773,10 @@ const chTally=(save.chess&&typeof save.chess==='object')?save.chess:(save.chess=
 const CHNAME=['Thiên Phượng','Huyền Long'],CHSIDE=['Đỏ','Đen'];
 let chGame=null,chTok=0,chSpeed=1,chState='idle',chAnim=null,chLine=[],chEval=0,chDepth=0,chNo=0,chLog=[],chWinner=-2,chWhy='',chOverT=0,chView=0,chThinkMs=0,chSeed=[1,2],chSettle=[];
 const chAt=new Array(256).fill(null);
+/* --- chế độ So tài: người chơi cầm quân Đỏ, đấu với AI cầm quân Đen (ngoại tuyến) --- */
+let chVs=false,chLevel=(save.chessLv===0||save.chessLv===1||save.chessLv===2)?save.chessLv:1,chSel=0,chMoves=[],chHumanRes=null;
+const CHLV=[{n:'Dễ',ms:60,d:2},{n:'Vừa',ms:350,d:4},{n:'Khó',ms:1400,d:9}];
+const chVsT=(save.chessVs&&typeof save.chessVs==='object')?save.chessVs:(save.chessVs={w:0,l:0,d:0});
 function chHi(from,to){const a=chSq(from&15,from>>4),b=chSq(to&15,to>>4);chHiF.position.x=a.x;chHiF.position.z=a.z;chHiT.position.x=b.x;chHiT.position.z=b.z;chHiOn=1}
 function chSetup(){
   for(const k in chPool)chPool[k].forEach(o=>{o.used=false;o.g.visible=false;o.sh.visible=false});
@@ -5799,11 +5803,11 @@ async function chChoose(tok){
   if(mv&&g.moves.length===1&&Math.random()<.4)mv=0;
   if(mv){await wait(Math.max(60,380/chSpeed));if(tok!==chTok)return 0;chDepth=0;return mv}
   let ban=legal.filter(m=>g.losesByPerpetual(m));if(ban.length>=legal.length)ban=[];
-  const ms=chThinkMs||Math.round(clamp(750/chSpeed,110,800));
-  let r=await chAsk({fen:XQ.START,moves:g.moves.slice(),ms,depth:9,seed:chSeed[side],ban});
+  const LV=chVs?CHLV[chLevel]:null,ms=LV?LV.ms:(chThinkMs||Math.round(clamp(750/chSpeed,110,800)));
+  let r=await chAsk({fen:XQ.START,moves:g.moves.slice(),ms,depth:LV?LV.d:9,seed:chSeed[side],ban});
   if(tok!==chTok)return 0;
   if(!r){/* không có worker: tìm nông trên luồng chính */
-    await wait(30);const pos=new XQ.Position().setFen(XQ.START);g.moves.forEach(m=>pos.make(m));r=XQ.think(pos,{ms:90,depth:5,seed:chSeed[side],ban});if(tok!==chTok)return 0}
+    await wait(30);const pos=new XQ.Position().setFen(XQ.START);g.moves.forEach(m=>pos.make(m));r=XQ.think(pos,{ms:90,depth:LV?Math.min(5,LV.d):5,seed:chSeed[side],ban});if(tok!==chTok)return 0}
   mv=r.move;if(legal.indexOf(mv)<0)mv=legal[Math.floor(Math.random()*legal.length)];
   chDepth=r.depth;chEval=side===0?r.score:-r.score;
   const left=Math.max(0,350/chSpeed-(performance.now()-t0));if(left>0)await wait(left);
@@ -5830,7 +5834,7 @@ function chAnimStep(dt){
     chAnim=null;A.res()}}
 /* --- vòng lặp ván cờ --- */
 function chNewGame(){
-  chGame=new XQ.Game();chNo++;chWinner=-2;chWhy='';chEval=0;chDepth=0;chLog=[];chSeed=[(Math.random()*1e9)|0,(Math.random()*1e9)|0];
+  chGame=new XQ.Game();chNo++;chWinner=-2;chWhy='';chEval=0;chDepth=0;chLog=[];chSel=0;chMoves=[];chSeed=[(Math.random()*1e9)|0,(Math.random()*1e9)|0];
   chLine=XQ.BOOK[Math.floor(Math.random()*XQ.BOOK.length)].split(' ');
   if(chWorker)chWorker.postMessage({cmd:'new'});chSetup();chState='think';chSignDraw();chUI()}
 const CHWHY={mate:'chiếu bí',stalemate:'hết nước đi (bị vây)',perp:'chiếu liên tục bị xử thua',rep:'lặp thế, hòa',60:'120 nước không ăn quân, hòa',material:'không đủ quân tấn công, hòa',len:'ván quá dài, hòa'};
@@ -5843,41 +5847,45 @@ async function chPlay(mv,tok){
   const ks=g.pos.kp[g.pos.side];
   if(info.check){chCheckSq=ks;const w=chSq(ks&15,ks>>4);chPuff(w.x,CBY+.9,w.z,4,0xff6a50)}else chCheckSq=0;
   if(info.result){chWinner=info.result.winner;chWhy=CHWHY[info.result.why]||info.result.why;
-    if(chWinner===0)chTally.r++;else if(chWinner===1)chTally.b++;else chTally.d++;persist();
+    if(chVs){if(chWinner===0)chVsT.w++;else if(chWinner===1)chVsT.l++;else chVsT.d++}else{if(chWinner===0)chTally.r++;else if(chWinner===1)chTally.b++;else chTally.d++}persist();
     chState='over';chOverT=0;chUI();chSignDraw();
     if(chWinner>=0){const lk=chPool[1+(chWinner^1)*8][0],w=chSq(lk.sq&15,lk.sq>>4);chPuff(w.x,CBY+.6,w.z,8,0xff8a60)}
   }else await wait(Math.max(40,260/chSpeed))}
+function chHumanTurn(){chState='human';chSel=0;chMoves=[];chUI();chSignDraw();return new Promise(res=>{chHumanRes=res})}
 async function chLoop(){
-  const tok=++chTok;chCancelPending();chAnim=null;chNewGame();
+  const tok=++chTok;chCancelPending();if(chHumanRes){const r=chHumanRes;chHumanRes=null;r(0)}chAnim=null;chNewGame();
   try{while(tok===chTok){
-    if(chGame.result){await wait(Math.max(300,9000/chSpeed));if(tok!==chTok)return;chNewGame();continue}
-    const mv=await chChoose(tok);if(tok!==chTok)return;if(!mv){await wait(200);continue}
+    if(chGame.result){if(chVs)return;await wait(Math.max(300,9000/chSpeed));if(tok!==chTok)return;chNewGame();continue}
+    const mv=(chVs&&chGame.pos.side===0)?await chHumanTurn():await chChoose(tok);if(tok!==chTok)return;if(!mv){await wait(200);continue}
     await chPlay(mv,tok)}}catch(err){console.error(err);if(tok===chTok)setTimeout(chLoop,1500)}}
 /* --- bảng tỉ số 3D --- */
 function chSignDraw(){const g=chSignC.getContext('2d'),W=1024,H=480;
   const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#3a1d12');gr.addColorStop(1,'#241209');g.fillStyle=gr;g.fillRect(0,0,W,H);
   g.strokeStyle='#e9b955';g.lineWidth=6;g.strokeRect(12,12,W-24,H-24);g.textAlign='center';g.textBaseline='middle';
   g.fillStyle='#f6d58a';g.font='bold 62px Georgia,serif';g.fillText('CỜ TƯỚNG · MNM',W/2,72);
-  g.font='600 40px system-ui,sans-serif';g.fillStyle='#ff9a80';g.textAlign='left';g.fillText('Đỏ · '+CHNAME[0],50,150);g.fillStyle='#b9d2f0';g.textAlign='right';g.fillText(CHNAME[1]+' · Đen',W-50,150);
-  g.textAlign='center';g.fillStyle='#fff3d6';g.font='bold 70px Georgia,serif';g.fillText(chTally.r+'  –  '+chTally.d+'  –  '+chTally.b,W/2,222);
-  g.font='500 26px system-ui,sans-serif';g.fillStyle='#cdbb9e';g.fillText('Đỏ thắng  ·  Hòa  ·  Đen thắng',W/2,268);
+  g.font='600 40px system-ui,sans-serif';g.fillStyle='#ff9a80';g.textAlign='left';g.fillText('Đỏ · '+(chVs?'Bạn':CHNAME[0]),50,150);g.fillStyle='#b9d2f0';g.textAlign='right';g.fillText(CHNAME[1]+' · Đen',W-50,150);
+  g.textAlign='center';g.fillStyle='#fff3d6';g.font='bold 70px Georgia,serif';g.fillText(chVs?(chVsT.w+'  –  '+chVsT.d+'  –  '+chVsT.l):(chTally.r+'  –  '+chTally.d+'  –  '+chTally.b),W/2,222);
+  g.font='500 26px system-ui,sans-serif';g.fillStyle='#cdbb9e';g.fillText(chVs?'Bạn thắng  ·  Hòa  ·  Máy thắng':'Đỏ thắng  ·  Hòa  ·  Đen thắng',W/2,268);
   g.fillStyle='#ffd27a';g.font='bold 38px system-ui,sans-serif';
   let line1='',line2='';const n=chGame?chGame.moves.length:0;
-  if(chState==='over'){line1=chWinner>=0?(CHSIDE[chWinner].toUpperCase()+' THẮNG'):'HÒA';line2=chWhy}
-  else{const sd=chGame?chGame.pos.side:0;line1='Ván '+chNo+' · Nước '+(n+1);line2=CHNAME[sd]+' ('+CHSIDE[sd]+') '+(chState==='think'?'đang suy nghĩ…':'đang đi')}
+  if(chState==='over'){line1=chWinner>=0?((chVs&&chWinner===0?'BẠN':CHSIDE[chWinner].toUpperCase())+' THẮNG'):'HÒA';line2=chWhy}
+  else{const sd=chGame?chGame.pos.side:0;line1='Ván '+chNo+' · Nước '+(n+1);line2=(chVs&&sd===0?'Bạn':CHNAME[sd])+' ('+CHSIDE[sd]+') '+(chState==='think'||chState==='human'?'đang suy nghĩ…':'đang đi')}
   g.fillText(line1,W/2,340);g.fillStyle='#fff3d6';g.font='500 34px system-ui,sans-serif';g.fillText(line2,W/2,396);
   const last=chLog.length?chLog[chLog.length-1]:'';g.fillStyle='#cdbb9e';g.font='500 28px system-ui,sans-serif';g.fillText(last.replace(/^\d+\.\s*/,''),W/2,444);
   chSignT.needsUpdate=true}
 /* --- bảng điều khiển --- */
-const cxE={};['cxBar','cxNow','cxLast','cxLog','cxTally','cxSpeed','cxView','cxNew','cxInfo'].forEach(i=>cxE[i]=document.getElementById(i));
+const cxE={};['cxBar','cxNow','cxLast','cxLog','cxTally','cxVs','cxLevel','cxView','cxNew','cxInfo'].forEach(i=>cxE[i]=document.getElementById(i));
 function chUI(){if(openId!=='mChess'||!chGame)return;
   const sd=chGame.pos.side,n=chGame.moves.length;
-  cxE.cxNow.textContent=chState==='over'?(chWinner>=0?CHSIDE[chWinner]+' thắng · '+chWhy:'Hòa · '+chWhy):('Nước '+(n+1)+' · '+CHNAME[sd]+' ('+CHSIDE[sd]+') '+(chState==='think'?'đang suy nghĩ…':'đang đi'));
+  cxE.cxNow.textContent=chState==='over'?(chWinner>=0?(chVs?(chWinner===0?'Bạn':CHNAME[1]):CHSIDE[chWinner])+' thắng · '+chWhy:'Hòa · '+chWhy):chState==='human'?('Nước '+(n+1)+' · Lượt của bạn (Đỏ)'+(chCheckSq?' · bạn bị chiếu!':'')+(n===0?' · chạm quân rồi chạm ô sáng để đi':'')):('Nước '+(n+1)+' · '+CHNAME[sd]+' ('+CHSIDE[sd]+') '+(chState==='think'?'đang suy nghĩ…':'đang đi'));
   cxE.cxBar.style.width=(50+50*Math.tanh(chEval/700)).toFixed(1)+'%';
   const ev=(chEval/100).toFixed(1);cxE.cxInfo.textContent='Quân: Đỏ '+(chGame.pos.cnt[0].reduce((a,b)=>a+b,0))+' · Đen '+(chGame.pos.cnt[1].reduce((a,b)=>a+b,0))+(chDepth?' · Độ sâu '+chDepth:'')+' · Thế cờ '+(chEval>=0?'Đỏ +':'Đen +')+Math.abs(ev);
   cxE.cxLog.textContent=chLog.slice(-8).join('\n');cxE.cxLog.scrollTop=cxE.cxLog.scrollHeight;
-  cxE.cxTally.textContent='Ván '+chNo+' · Đỏ '+chTally.r+' – Hòa '+chTally.d+' – Đen '+chTally.b}
-cxE.cxSpeed.addEventListener('click',()=>{chSpeed=chSpeed>=4?1:chSpeed*2;cxE.cxSpeed.textContent='Tốc độ ×'+chSpeed});
+  cxE.cxTally.textContent=chVs?('Ván '+chNo+' · Bạn thắng '+chVsT.w+' – Hòa '+chVsT.d+' – Thua '+chVsT.l):('Ván '+chNo+' · Đỏ '+chTally.r+' – Hòa '+chTally.d+' – Đen '+chTally.b)}
+function chVsUI(){cxE.cxVs.setAttribute('aria-pressed',String(chVs));cxE.cxLevel.hidden=!chVs;cxE.cxVs.textContent=chVs?'Xem đấu':'So tài';cxE.cxLevel.textContent='Mức: '+CHLV[chLevel].n}
+cxE.cxVs.addEventListener('click',()=>{chVs=!chVs;chVsUI();chLoop()});
+cxE.cxLevel.addEventListener('click',()=>{chLevel=(chLevel+1)%CHLV.length;save.chessLv=chLevel;persist();chVsUI()});
+chVsUI();
 cxE.cxView.addEventListener('click',()=>{chView=chView?0:1;cxE.cxView.textContent=chView?'Góc nhìn: 2D':'Góc nhìn: 3D'});
 cxE.cxNew.addEventListener('click',()=>{chLoop()});
 function startChess(){openModal('mChess');busy=true;faceTo(CHX,CHZ);setPose('idle');chUI()}
@@ -5912,7 +5920,7 @@ function cx2dDraw(){
   if(cx2._w!==W||cx2._h!==Hc||cx2._d!==dpr){cx2.width=Math.round(W*dpr);cx2.height=Math.round(Hc*dpr);cx2.style.width=W+'px';cx2.style.height=Hc+'px';cx2._w=W;cx2._h=Hc;cx2._d=dpr}
   const g=cx2g;g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,W,Hc);
   const top=W<700?98:14,cell=Math.max(10,Math.min((W-24)/9.2,(Hc-top-12)/10.2));
-  const ox=W/2-4*cell,oy=top+(Hc-top)/2-4.5*cell,PX=f=>ox+f*cell,PY=r=>oy+r*cell;
+  const ox=W/2-4*cell,oy=top+(Hc-top)/2-4.5*cell,PX=f=>ox+f*cell,PY=r=>oy+r*cell;cx2._g={ox,oy,cell};
   const lw=Math.max(1.4,cell*.035);
   /* mặt bàn */
   const bx=PX(-.6),by=PY(-.6),bw=9.2*cell,bh=10.2*cell;
@@ -5947,9 +5955,14 @@ function cx2dDraw(){
     g.fillStyle=rc;g.textAlign='center';g.textBaseline='middle';
     if(chHan){g.font='bold '+(r*1.1)+'px KaiTi,STKaiti,"Noto Serif CJK SC","Songti SC",serif';g.fillText(CHHAN[sd][t],cx,cy+r*.06)}
     else{g.font='bold '+(r*(CHVN[t].length>3?.5:.7))+'px Georgia,serif';g.fillText(CHVN[t],cx,cy+r*.04)}}
+  if(chVs&&chState==='human'&&chSel&&chGame){const sx=PX((chSel&15)-3),sy=PY((chSel>>4)-3);
+    g.strokeStyle='#35e0b0';g.lineWidth=cell*.08;g.beginPath();g.arc(sx,sy,cell*.5,0,Math.PI*2);g.stroke();
+    for(const m of chMoves){const to=m>>8,tx=PX((to&15)-3),ty=PY((to>>4)-3);
+      if(chGame.pos.sq[to]){g.strokeStyle='#e0392b';g.lineWidth=cell*.07;g.beginPath();g.arc(tx,ty,cell*.5,0,Math.PI*2);g.stroke()}
+      else{g.fillStyle='rgba(53,224,176,.92)';g.strokeStyle='rgba(20,60,50,.6)';g.lineWidth=cell*.02;g.beginPath();g.arc(tx,ty,cell*.13,0,Math.PI*2);g.fill();g.stroke()}}}
 }
 function chessUpdate(dt,t){
-  cx2dDraw();
+  cx2dDraw();chSelUpdate(t);
   chLight.intensity=lerp(7,16,tod);
   chAnimStep(dt);
   for(let i=chSettle.length-1;i>=0;i--){const s=chSettle[i];s.t-=dt;const k=Math.max(0,s.t/.22),q=.09*Math.sin(Math.PI*(1-k))*k;s.o.g.scale.set(1+q*.6,1-q,1+q*.6);if(s.t<=0){s.o.g.scale.set(1,1,1);chSettle.splice(i,1)}}
@@ -5961,7 +5974,47 @@ function chessUpdate(dt,t){
     for(const s of XQ.SQS){const o=chAt[s];if(!o)continue;const sd=o.pc>>3,isK=(o.pc&7)===1;
       if(chWinner>=0&&sd===chWinner)o.g.position.y=CBY+Math.max(0,Math.sin(chOverT*5-(s&15)*.5-(s>>4)*.3))*.16;
       else if(chWinner>=0&&isK)o.g.rotation.z=lerp(o.g.rotation.z,1.35,Math.min(1,dt*3))}}}
-function chDebug(){return{game:()=>chGame,state:()=>chState,speed:v=>{chSpeed=v},think:v=>{chThinkMs=v},tally:chTally,pool:chPool,at:chAt,worker:()=>!!chWorker,restart:chLoop,log:()=>chLog,no:()=>chNo,why:()=>chWhy,winner:()=>chWinner,han:chHan}}
+function chDebug(){return{game:()=>chGame,state:()=>chState,speed:v=>{chSpeed=v},think:v=>{chThinkMs=v},tally:chTally,pool:chPool,at:chAt,worker:()=>!!chWorker,restart:chLoop,vs:v=>{chVs=!!v;chVsUI();chLoop()},pick:chPick,pickAt:chScreenPick,sel:()=>({s:chSel,m:chMoves.slice()}),lv:v=>{chLevel=v;chVsUI()},log:()=>chLog,no:()=>chNo,why:()=>chWhy,winner:()=>chWinner,han:chHan}}
+/* --- So tài: vòng chọn quân, chấm nước đi, chạm để chọn / đi --- */
+const chSelR=new THREE.Mesh(new THREE.RingGeometry(.36,.47,32),chRingM(0x35e0b0));
+chSelR.rotation.x=-Math.PI/2;chSelR.position.y=CBY+.014;chSelR.visible=false;chRoot.add(chSelR);
+const chDotG=new THREE.CircleGeometry(.13,16),chCapG=new THREE.RingGeometry(.36,.47,32);
+const chDots=Array.from({length:24},()=>{const d=new THREE.Mesh(chDotG,chRingM(0x35e0b0)),c=new THREE.Mesh(chCapG,chRingM(0xff4a3a));
+  [d,c].forEach(m=>{m.rotation.x=-Math.PI/2;m.position.y=CBY+.014;m.visible=false;chRoot.add(m)});return{d,c}});
+function chSelUpdate(t){
+  const on=!!(chVs&&chState==='human'&&chSel&&chGame);
+  if(on){const w=chSq(chSel&15,chSel>>4);chSelR.position.x=w.x;chSelR.position.z=w.z;chSelR.material.opacity=.7+.25*Math.sin(t*6);chSelR.visible=true}else chSelR.visible=false;
+  for(let i=0;i<chDots.length;i++){const o=chDots[i],m=on?chMoves[i]:0;
+    if(!m){o.d.visible=o.c.visible=false;continue}
+    const to=m>>8,w=chSq(to&15,to>>4),cap=chGame.pos.sq[to],q=cap?o.c:o.d,z=cap?o.d:o.c;
+    z.visible=false;q.visible=true;q.position.x=w.x;q.position.z=w.z;q.material.opacity=.72+.25*Math.sin(t*6+i)}}
+function chPick(s){
+  if(!chVs||chState!=='human'||!chGame||chGame.result)return;
+  const pc=chGame.pos.sq[s];
+  if(chSel){const mv=chMoves.find(m=>(m>>8)===s);
+    if(mv){const r=chHumanRes;chHumanRes=null;chSel=0;chMoves=[];if(r)r(mv);return}}
+  if(pc&&(pc>>3)===0&&s!==chSel){chSel=s;chMoves=chGame.legal().filter(m=>(m&255)===s);try{Aud.click()}catch(e){}}
+  else{chSel=0;chMoves=[]}}
+const chPv=new THREE.Vector3();
+function chScreenPick(cx,cy){
+  if(chView===1){const G=cx2._g;if(!G||cx2.hidden)return 0;
+    const f=Math.round((cx-G.ox)/G.cell),r=Math.round((cy-G.oy)/G.cell);
+    if(f<0||f>8||r<0||r>9||Math.hypot(cx-(G.ox+f*G.cell),cy-(G.oy+r*G.cell))>G.cell*.62)return 0;
+    return (r+3)*16+f+3}
+  camera.updateMatrixWorld();
+  const P=(x,y,z)=>{chPv.set(x,y,z).project(camera);return[(chPv.x*.5+.5)*innerWidth,(-chPv.y*.5+.5)*innerHeight]};
+  let best=0,bd=1e9;
+  for(const s of XQ.SQS){const w=chSq(s&15,s>>4),p=P(w.x,CBY+(chAt[s]?.38:.02),w.z),d=Math.hypot(p[0]-cx,p[1]-cy);if(d<bd){bd=d;best=s}}
+  if(!best)return 0;
+  const w=chSq(best&15,best>>4),c0=P(w.x,CBY,w.z),c1=P(w.x+CELL,CBY,w.z),c2=P(w.x,CBY,w.z+CELL);
+  const cs=Math.min(Math.hypot(c1[0]-c0[0],c1[1]-c0[1]),Math.hypot(c2[0]-c0[0],c2[1]-c0[1]));
+  return bd<=cs*.9?best:0}
+let chTap=null;
+canvas.addEventListener('pointerdown',e=>{chTap=(openId==='mChess'&&chVs)?{id:e.pointerId,x:e.clientX,y:e.clientY,t:performance.now()}:null});
+canvas.addEventListener('pointerup',e=>{const T=chTap;chTap=null;
+  if(!T||T.id!==e.pointerId||openId!=='mChess'||!chVs)return;
+  if(Math.hypot(e.clientX-T.x,e.clientY-T.y)>12||performance.now()-T.t>700)return;
+  const s=chScreenPick(e.clientX,e.clientY);if(s)chPick(s)});
 /* khách AI đến xem cờ */
 setTimeout(chLoop,0);
 
@@ -6013,7 +6066,8 @@ function fwDir(){const u=rnd(-1,1),a=rnd(0,TAU),s=Math.sqrt(1-u*u);return[s*Math
 function fwBurst(x,y,z,type,c,word){
   const P3=fwRand3();c=P3[0];const c2=P3[1],c3=P3[2];
   const mc=()=>P3[(Math.random()*3)|0];  /* nhiều màu trong cùng một quả */
-  if(type==='peony'||type==='double'){const n=type==='double'?100:130;
+  if(FWSHAPE[type]&&fwShapeBurst(x,y,z,type)){}
+  else if(type==='peony'||type==='double'){const n=type==='double'?100:130;
     for(let i=0;i<n;i++){const d=fwDir(),s=rnd(8.6,10.4);fwSpawn(x,y,z,d[0]*s,d[1]*s,d[2]*s,type==='double'?(Math.random()<.5?c:c3):mc(),rnd(1.9,2.6),.42,1.5,2.2)}
     if(type==='double')for(let i=0;i<60;i++){const d=fwDir(),s=rnd(4,5.4);fwSpawn(x,y,z,d[0]*s,d[1]*s,d[2]*s,c2,rnd(1.7,2.3),.38,1.5,2.0)}}
   else if(type==='ring'){const n=96,a1=rnd(0,TAU),nx=Math.cos(a1)*.5,ny=rnd(-.4,.4),nz=Math.sin(a1)*.5+.5,nl=Math.hypot(nx,ny,nz);
@@ -6021,7 +6075,7 @@ function fwBurst(x,y,z,type,c,word){
     const Vv=[N[1]*U[2]-N[2]*U[1],N[2]*U[0]-N[0]*U[2],N[0]*U[1]-N[1]*U[0]];
     for(let i=0;i<n;i++){const a=i/n*TAU,s=10;fwSpawn(x,y,z,(U[0]*Math.cos(a)+Vv[0]*Math.sin(a))*s,(U[1]*Math.cos(a)+Vv[1]*Math.sin(a))*s,(U[2]*Math.cos(a)+Vv[2]*Math.sin(a))*s,P3[Math.floor(i/n*3+(a1>3?1:0))%3],rnd(1.9,2.4),.42,1.6,1.6)}
     for(let i=0;i<30;i++){const d=fwDir(),s=rnd(1.5,3.5);fwSpawn(x,y,z,d[0]*s,d[1]*s,d[2]*s,c2,rnd(1.2,1.8),.34,1.4,1.5)}}
-  else if(type==='text'&&fwTextBurst(x,y,z,word)){}
+  else if(type==='text'){if(!fwTextBurst(x,y,z,word)){for(let i=0;i<130;i++){const d=fwDir(),s=rnd(8.6,10.4);fwSpawn(x,y,z,d[0]*s,d[1]*s,d[2]*s,mc(),rnd(1.9,2.6),.42,1.5,2.2)}}}
   else if(type==='willow'){c=P3[0];for(let i=0;i<120;i++){const d=fwDir(),s=rnd(4.5,8);fwSpawn(x,y,z,d[0]*s,d[1]*s,d[2]*s,Math.random()<.7?c:[1,.95,.75],rnd(3.4,4.6),.36,1.15,3.2)}}
   else if(type==='heart'){const n=110;for(let i=0;i<n;i++){const a=i/n*TAU,hx=16*Math.pow(Math.sin(a),3),hy=13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a);
     fwSpawn(x,y,z,hx/17*9.5,hy/17*9.5,rnd(-.4,.4),(i%3===0?[1,.9,.95]:(i%3===1?[1,.35,.5]:[1,.55,.3])),rnd(2,2.5),.42,1.7,1.0)}}
@@ -6044,7 +6098,51 @@ function fwTextBurst(x,y,z,w){
   for(const p of pts){const u=p[0]*sc+rnd(-.2,.2),v=p[1]*sc+rnd(-.2,.2),q=Math.min(.999,Math.max(0,w==='MNM'?(p[0]/2+.5):(p[1]*.5+.5)))*2,k0=Math.floor(q),A=R3[k0],B=R3[k0+1],f=q-k0,col=[A[0]+(B[0]-A[0])*f,A[1]+(B[1]-A[1])*f,A[2]+(B[2]-A[2])*f];fwSpawn(x,y,z,rx*u,v,rz*u,col,rnd(3.0,3.5),.32,2.2,.25)}
   for(let i=0;i<24;i++){const d=fwDir(),sp=rnd(2,5);fwSpawn(x,y,z,d[0]*sp,d[1]*sp,d[2]*sp,[1,.9,.6],rnd(1,1.6),.3,1.5,1.5)}
   return true}
-const fwRockets=[],FWTYPES=['peony','peony','double','ring','willow','heart'];
+const fwRockets=[];
+/* tỉ lệ xuất hiện (tổng 100): pháo thường, chữ 福 祿 壽 và các hình vẽ cùng nằm trong một bảng ngẫu nhiên; riêng MNM luôn có đúng 1 quả trong mỗi chuỗi nhiều quả */
+const FWTYPEW=[['peony',18],['double',12],['ring',10],['willow',10],['text',12],['heart',8],['star',8],['smile',6],['flower',6],['butterfly',4],['spiral',3],['saturn',2],['moon',1]];
+const FWSHAPE={heart:1,star:1,smile:1,flower:1,butterfly:1,spiral:1,saturn:1,moon:1};
+function fwPickType(){let r=Math.random()*FWTYPEW.reduce((a,b)=>a+b[1],0);for(const [t,w] of FWTYPEW){r-=w;if(r<0)return t}return 'peony'}
+/* các hình vẽ trên bầu trời: danh sách điểm [u,v,màu], u v trong khoảng -1..1 */
+function fwShapePts(type,P3){
+  const L=[],add=(u,v,c)=>L.push([u,v,c]),T=Math.PI*2;
+  if(type==='star'){const V=[];for(let i=0;i<10;i++){const a=Math.PI/2+i*Math.PI/5,r=i%2?.42:1;V.push([Math.cos(a)*r,Math.sin(a)*r+.05])}
+    for(let i=0;i<10;i++){const A=V[i],B=V[(i+1)%10];for(let k=0;k<14;k++){const f=k/14;add(A[0]+(B[0]-A[0])*f,A[1]+(B[1]-A[1])*f,[1,.86,.3])}
+      for(let k=0;k<7;k++){const f=k/7;add((A[0]+(B[0]-A[0])*f)*.55,(A[1]-.05+(B[1]-A[1])*f)*.55+.05,[1,.97,.8])}}
+    add(0,.05,[1,1,1])}
+  else if(type==='smile'){
+    for(let i=0;i<56;i++){const a=i/56*T;add(Math.cos(a),Math.sin(a),[1,.85,.2])}
+    for(const sx of[-1,1]){add(sx*.36,.3,[1,.6,.2]);for(let i=0;i<10;i++){const a=i/10*T;add(sx*.36+Math.cos(a)*.1,.3+Math.sin(a)*.16,[1,.6,.2])}}
+    for(let i=0;i<=24;i++){const a=Math.PI*(1.12+.76*i/24);add(Math.cos(a)*.6,Math.sin(a)*.6,[1,.55,.2])}}
+  else if(type==='heart'){
+    for(let i=0;i<100;i++){const a=i/100*T,hx=16*Math.pow(Math.sin(a),3),hy=13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a);
+      add(hx/17,hy/17+.05,i%3===0?[1,.8,.88]:[1,.35,.5]);if(i%2===0)add(hx/17*.55,hy/17*.55+.03,[1,.6,.72])}}
+  else if(type==='flower'){
+    for(let i=0;i<220;i++){const a=i/220*T,r=Math.cos(4*a),f=Math.abs(r);add(r*Math.cos(a),r*Math.sin(a),[1,.45+.5*f*f,.7+.28*f*f])}
+    for(let i=0;i<10;i++){const a=i/10*T;add(Math.cos(a)*.14,Math.sin(a)*.14,[1,.85,.3])}add(0,0,[1,.95,.6])}
+  else if(type==='butterfly'){
+    for(let i=0;i<520;i++){const t=i/520*12*Math.PI,r=Math.exp(Math.sin(t))-2*Math.cos(4*t)+Math.pow(Math.sin((2*t-Math.PI)/24),5);
+      add(Math.sin(t)*r/4.3,Math.cos(t)*r/4.3+.05,P3[Math.floor(i/520*3)%3])}
+    for(let i=0;i<8;i++)add(0,-.45+i*.11,[1,.95,.8])}
+  else if(type==='spiral'){
+    for(let arm=0;arm<2;arm++)for(let i=0;i<70;i++){const t=i/70,a=t*3.2*Math.PI+arm*Math.PI,r=.1+.9*t;add(Math.cos(a)*r,Math.sin(a)*r,P3[Math.min(2,Math.floor(t*3))])}
+    for(let i=0;i<8;i++)add(rnd(-.12,.12),rnd(-.12,.12),[1,.95,.8])}
+  else if(type==='saturn'){
+    for(let i=0;i<80;i++){const a=rnd(0,T),r=.42*Math.sqrt(rnd(0,1));add(Math.cos(a)*r,Math.sin(a)*r,i%4?[1,.68,.28]:[1,.85,.5])}
+    const rot=-.42,cr=Math.cos(rot),sr=Math.sin(rot);
+    for(let i=0;i<100;i++){const a=i/100*T,x=Math.cos(a),y=Math.sin(a)*.27;if(y>0&&Math.abs(x)<.45)continue;add(x*cr-y*sr,x*sr+y*cr,i%2?[.92,.92,1]:P3[0])}}
+  else if(type==='moon'){
+    for(let i=0;i<110;i++){const a=i/110*T,x=Math.cos(a),y=Math.sin(a);if(Math.hypot(x-.42,y-.1)>.82)add(x,y,[1,.95,.7])}
+    for(let i=0;i<90;i++){const a=i/90*T,x=.42+Math.cos(a)*.82,y=.1+Math.sin(a)*.82;if(Math.hypot(x,y)<1)add(x,y,[1,.9,.6])}
+    add(.62,.3,[1,1,1]);add(.62,.42,[1,.95,.8]);add(.74,.3,[1,.95,.8]);add(.5,.3,[1,.95,.8]);add(.62,.18,[1,.95,.8])}
+  return L}
+function fwShapeBurst(x,y,z,type){
+  const P3=fwRand3(),pts=fwShapePts(type,P3);
+  let fx=x-camera.position.x,fz=z-camera.position.z;const fl=Math.hypot(fx,fz)||1;fx/=fl;fz/=fl;
+  const rx=-fz,rz=fx,hwv=Math.hypot(x-camera.position.x,z-camera.position.z)*Math.tan(Math.atan(Math.tan(camera.fov*Math.PI/360)*camera.aspect)),hv=Math.hypot(x-camera.position.x,z-camera.position.z)*Math.tan(camera.fov*Math.PI/360),sc=Math.max(3.5,Math.min(10,1.1*Math.min(hwv,hv)));
+  for(const p of pts){const u=p[0]*sc+rnd(-.12,.12),v=p[1]*sc+rnd(-.12,.12);fwSpawn(x,y,z,rx*u,v,rz*u,p[2],rnd(3.0,3.5),.34,2.2,.25)}
+  for(let i=0;i<24;i++){const d=fwDir(),sp=rnd(2,5);fwSpawn(x,y,z,d[0]*sp,d[1]*sp,d[2]*sp,[1,.9,.6],rnd(1,1.6),.3,1.5,1.5)}
+  return true}
 function fwSide(){return player.position.z>=FWZ-.62?-1:1}  /* -1: người chơi đứng phía trước bệ, bắn về phía sau */
 function fwLaunchOne(mine,tube,word){
   let idx;
@@ -6053,11 +6151,13 @@ function fwLaunchOne(mine,tube,word){
   const back=idx>=5,j=idx%5,sx=FWX-1.2+j*.6,sy=1.75,sz=FWZ+(back?-1.04:-.22);
   const dz=mine?fwSide():(back?1:-1);
   let tx=FWX+rnd(-8,8),ty=rnd(14,23),tz=FWZ+dz*rnd(6,12);
-  if(word){ /* chữ nổ ngay trong tầm nhìn của camera */
+  const type=word?'text':fwPickType();if(type==='text'&&!word)word=pick(FWWORDS);
+  const shape=!!(word||FWSHAPE[type]);
+  if(shape||mine){ /* quả của người chơi (chữ, hình vẽ, pháo thường) đều nổ ngay trong tầm nhìn của camera */
     const cf=new THREE.Vector3();camera.getWorldDirection(cf);let fx=cf.x,fz=cf.z;const fl=Math.hypot(fx,fz)||1;fx/=fl;fz/=fl;
-    const D=rnd(24,32),hw=D*Math.tan(Math.atan(Math.tan(camera.fov*Math.PI/360)*camera.aspect)),lat=((fwAlt=-fwAlt)*rnd(.12,.3))*hw;
-    tx=camera.position.x+fx*D-fz*lat;tz=camera.position.z+fz*D+fx*lat;ty=rnd(13,20)}
-  fwRockets.push({sx,sy,sz,tx,ty,tz,t:0,dur:rnd(1.0,1.4),type:word?'text':pick(FWTYPES),word:word||null,mine:!!mine,c:pick(FWPAL)});
+    const D=rnd(24,32),hw=D*Math.tan(Math.atan(Math.tan(camera.fov*Math.PI/360)*camera.aspect)),lat=shape?((fwAlt=-fwAlt)*rnd(.08,.2))*hw:rnd(-.4,.4)*hw;
+    tx=camera.position.x+fx*D-fz*lat;tz=camera.position.z+fz*D+fx*lat;ty=shape?rnd(13,18):rnd(14,21)}
+  fwRockets.push({sx,sy,sz,tx,ty,tz,t:0,dur:rnd(1.0,1.4),type,word:word||null,mine:!!mine,c:pick(FWPAL)});
   for(let i=0;i<8;i++)fwSpawn(sx,sy,sz,rnd(-.8,.8),rnd(.5,2),rnd(-.8,.8),[1,.7,.3],rnd(.3,.6),.3,2,1);
   Aud.fwLaunch();if(mine){save.fw=(save.fw|0)+1;persist()}}
 function fwUpdate(dt,t){
@@ -6065,7 +6165,7 @@ function fwUpdate(dt,t){
     const x=r.sx+(r.tx-r.sx)*e,y=r.sy+(r.ty-r.sy)*e,z=r.sz+(r.tz-r.sz)*e;
     for(let j=0;j<3;j++)fwSpawn(x+rnd(-.05,.05),y,z+rnd(-.05,.05),rnd(-.3,.3),rnd(-.5,.1),rnd(-.3,.3),[1,.62,.25],rnd(.35,.7),.22,1.5,.8);
     fwSpawn(x,y,z,0,0,0,[1,.95,.8],.09,.5,0,0);
-    if(k>=1){if(r.mine)fwLastBurst={x,y,z};fwBurst(x,y,z,r.type,r.c,r.word);fwRockets.splice(i,1)}}
+    if(k>=1){if(r.mine){fwLastBurst={x,y,z};fwRecent.push({x,y,z,age:0})}fwBurst(x,y,z,r.type,r.c,r.word);fwRockets.splice(i,1)}}
   if(fwFlash){fwFlash.t+=dt;const k=fwFlash.t/.7;if(k>=1){fwLight.intensity=0;fwFlash=null}else{fwLight.position.set(fwFlash.x,fwFlash.y,fwFlash.z);fwLight.color.setRGB(fwFlash.c[0],fwFlash.c[1],fwFlash.c[2]);fwLight.intensity=420*(1-k)*(1-k)}}
   if(fwLive>0){fwMat.uniforms.uScale.value=innerHeight*PR*.5/Math.tan(camera.fov*Math.PI/360);let live=0;
     for(let i=0;i<FWN;i++){let l=fwLife[i];if(l<=0)continue;l-=dt;fwLife[i]=l;
@@ -6075,37 +6175,39 @@ function fwUpdate(dt,t){
       const k=1-l/fwMax[i];fwAl[i]=Math.pow(1-k,1.3)*(.7+.3*Math.sin(t*28+i*1.7));fwSz[i]=fwBase[i]*(1-.45*k)}
     fwLive=live;fwGeo.attributes.position.needsUpdate=fwGeo.attributes.aAlpha.needsUpdate=fwGeo.attributes.aSize.needsUpdate=fwGeo.attributes.aColor.needsUpdate=true}
   fwLook=lerp(fwLook,fwLookT,Math.min(1,dt*2.5))}
-let fwLook=0,fwLookT=0,fwN=1,fwWatch=false,fwLastBurst=null;const fwSkyPt=new THREE.Vector3();var fwAlt=1;
+let fwLook=0,fwLookT=0,fwN=1,fwWatch=false,fwLastBurst=null;const fwRecent=[];const fwSkyPt=new THREE.Vector3();var fwAlt=1;
 document.querySelectorAll('#fwKinds .chip').forEach(b=>b.addEventListener('click',()=>{fwN=+b.dataset.n;document.querySelectorAll('#fwKinds .chip').forEach(c=>c.setAttribute('aria-pressed',String(c===b)));Aud.click()}));
 function fwUI(){$('#fwNum').textContent=save.fw|0}
 function startFirework(){openModal('mFirework');busy=true;faceTo(FWX,FWZ);setPose('idle');fwUI()}
 $('#fwGo').addEventListener('click',async()=>{
   if(openId!=='mFirework')return;Aud.init();closeModal();busy=true;faceTo(FWX,FWZ);
-  setPose('plant');await wait(1300);Aud.tock();setPose('idle');fwLookT=14;fwLastBurst=null;fwSkyPt.set(FWX,15,FWZ+fwSide()*10);fwWatch=true;await wait(500);
+  setPose('plant');await wait(1300);Aud.tock();setPose('idle');fwLookT=14;fwLastBurst=null;fwRecent.length=0;fwSkyPt.set(FWX,15,FWZ+fwSide()*10);fwWatch=true;await wait(500);
   const n=fwN;
   const mnmAt=rndi(0,n-1),base=fwSide()<0?0:5,ord=[0,5,1,6,2,7,3,8,4,9];
-  for(let i=0;i<n;i++){const word=n>1?(i===mnmAt?'MNM':pick(FWWORDS)):null;fwLaunchOne(true,n===1?undefined:(n>=10?ord[i%10]:base+i),word);
+  for(let i=0;i<n;i++){const word=(n>1&&i===mnmAt)?'MNM':null;fwLaunchOne(true,n===1?undefined:(n>=10?ord[i%10]:base+i),word);
     if(n===1)break;
     const fin=n>=10&&i>=n-5;await wait(fin?rnd(160,300):(n>=10?rnd(450,900):rnd(450,750)))}
   await wait(n===1?3600:4800);fwLookT=0;fwWatch=false;setPose('pray');await wait(1400);setPose('idle');busy=false;fwUI();
   toast('Nguyện cho mọi điều tốt đẹp nở rộ như pháo hoa.')});
-function fwDebug(){return{rockets:fwRockets,live:()=>fwLive,launch:fwLaunchOne,burst:fwBurst,look:()=>fwLook,setLook:v=>{fwLook=v;fwLookT=v}}}
+function fwDebug(){return{rockets:fwRockets,recent:fwRecent,live:()=>fwLive,launch:fwLaunchOne,burst:fwBurst,look:()=>fwLook,setLook:v=>{fwLook=v;fwLookT=v}}}
 
 /* ============ Camera bám theo vật bay: đèn trời, pháo hoa, hoa đăng ============ */
 const fc={p:new THREE.Vector3(),tmp:new THREE.Vector3(),w:0,lift:0};
 function focusUpdate(dt){
   let want=0;const w=skyWatch;
-  if(w&&w.alive&&w.t<12){fc.tmp.set(w.x,w.y+.5,w.z);want=1}
+  if(w&&w.alive&&w.t<12){const vy=Math.min(3.2,.35+w.t*.18);fc.tmp.set(w.x+w.vx*.8,w.y+.5+vy*.8,w.z+w.vz*.8);want=1}  /* nhìn trước một chút theo hướng bay */
   else if(fwWatch){
-    let n=0,cx=0,cy=0,cz=0;
-    for(const r of fwRockets){if(!r.mine||r.t>=1)continue;const k=Math.min(1,r.t),e=1-(1-k)*(1-k);cx+=r.sx+(r.tx-r.sx)*e;cy+=r.sy+(r.ty-r.sy)*e;cz+=r.sz+(r.tz-r.sz)*e;n++}
-    if(n)fc.tmp.set(cx/n,cy/n,cz/n);
+    /* khung hình ôm các điểm sắp nổ và các vụ nổ vừa rồi, không đuổi theo quả pháo đang bay */
+    let n=0,cx=0,cy=0,cz=0;const add=(x,y,z,wt)=>{cx+=x*wt;cy+=y*wt;cz+=z*wt;n+=wt};
+    for(const r of fwRockets)if(r.mine)add(r.tx,r.ty,r.tz,1);
+    for(let i=fwRecent.length-1;i>=0;i--){const b=fwRecent[i];b.age+=dt;if(b.age>3.4)fwRecent.splice(i,1);else add(b.x,b.y,b.z,1-.7*b.age/3.4)}
+    if(n>0)fc.tmp.set(cx/n,cy/n,cz/n);
     else if(fwLastBurst)fc.tmp.set(fwLastBurst.x,fwLastBurst.y,fwLastBurst.z);
     else fc.tmp.copy(fwSkyPt);
     want=1}
   else if(lotusWatch&&lotusWatch.t<4){lotusWatch.t+=dt;lotusWatch.l.g.getWorldPosition(fc.tmp);want=.85}
-  if(want>0){if(fc.w<.02)fc.p.copy(fc.tmp);else fc.p.lerp(fc.tmp,Math.min(1,dt*(fwWatch?3.2:4)))}
-  fc.w=lerp(fc.w,want,Math.min(1,dt*(want>0?2.2:1.5)));
+  if(want>0){if(fc.w<.02)fc.p.copy(fc.tmp);else fc.p.lerp(fc.tmp,Math.min(1,dt*6))}
+  fc.w=lerp(fc.w,want,Math.min(1,dt*(want>0?4:1.5)));
   fc.lift=clamp((fc.p.y-3)/12,0,1)}
 
 /* ============ Đám khách AI (InstancedMesh) ============ */
@@ -6562,7 +6664,7 @@ const ZONES=[
   {id:'well',x:WELL.x,z:WELL.z,r:3.2,label:'Kéo nước giếng'},
   {id:'bath',x:BATH.x,z:BATH.z,r:3.2,label:'Tắm Phật'},
   {id:'sky',x:SKY.x,z:SKY.z,r:3.2,label:'Thả đèn MNM'},
-  {id:'chess',x:CHX,z:CHZ,r:7.4,label:'Xem đánh cờ'},
+  {id:'chess',x:CHX,z:CHZ,r:7.4,label:'Xem đấu cờ'},
   {id:'firework',x:FWX,z:FWZ,r:3.7,label:'Đốt pháo hoa'},
   {id:'meditate',x:0,z:0,r:1.5,label:'Ngồi thiền'},
   {id:'bow',x:0,z:-14.4,r:2.1,label:'Lạy Phật'},
@@ -6660,6 +6762,7 @@ let openId=null;
 function openModal(id){closeModal();openId=id;$('#'+id).classList.add('open')}
 function closeModal(){
   if(!openId)return;
+  if(openId==='mChess'&&chVs){chVs=false;chVsUI();chLoop()}
   if(openId==='mMed')medEnd(false);
   if(openId==='mWell'){wellS.tok++;wellS.target=0;wellS.lock=false;wellS.done=false}
   if(openId==='mBath'){bathS.tok++;bathS.busy=false}
@@ -7367,11 +7470,16 @@ const I18N_MAP={
 "Tốc độ ×1": "Speed ×1",
 "Tốc độ ×2": "Speed ×2",
 "Tốc độ ×4": "Speed ×4",
+"So tài": "Play AI",
+"Xem đấu": "Watch",
+"Mức: Dễ": "Level: Easy",
+"Mức: Vừa": "Level: Medium",
+"Mức: Khó": "Level: Hard",
 "Góc nhìn": "View",
 "Góc nhìn: 3D": "View: 3D",
 "Góc nhìn: 2D": "View: 2D",
 "Ván mới": "New game",
-"Xem đánh cờ": "Watch xiangqi",
+"Xem đấu cờ": "Watch match",
 "Thiên Phượng (Đỏ)": "Sky Phoenix (Red)",
 "Huyền Long (Đen)": "Dark Dragon (Black)",
 "Đốt pháo hoa": "Set off fireworks",
@@ -7597,9 +7705,9 @@ const I18N_MAP={
 "Chính điện:": "Main hall:",
 "ngồi thiền ở đệm trống có vòng sáng (chọn 1, 3 hoặc 5 phút; hít vào 4 nhịp, thở ra 6 nhịp theo vòng sáng). Lạy Phật: đứng trên đệm đỏ trước tượng, nhân vật tự lạy ba lạy.": "meditate on the empty cushion with the glowing ring (choose 1, 3 or 5 minutes; inhale 4 beats, exhale 6, following the ring). Bowing: stand on the red mat before the statue and the character bows three times.",
 "Cờ tướng:": "Xiangqi:",
-"góc sân phải, gần cổng. Hai cao thủ AI (Thiên Phượng cầm quân Đỏ, Huyền Long cầm quân Đen) tự đấu cả ván theo luật cờ tướng. Lại gần bàn, bấm “Xem đánh cờ” để xem từ trên cao, đổi tốc độ, góc nhìn hoặc mở ván mới.": "right corner of the courtyard, near the gate. Two AI masters (Sky Phoenix plays Red, Dark Dragon plays Black) play full games by xiangqi rules. Walk up to the board and tap “Watch xiangqi” to view from above, change speed or view, or start a new game.",
+"góc sân phải, gần cổng. Hai cao thủ AI (Thiên Phượng cầm quân Đỏ, Huyền Long cầm quân Đen) tự đấu cả ván theo luật cờ tướng. Lại gần bàn, bấm “Xem đấu cờ” để xem từ trên cao, đổi góc nhìn hoặc mở ván mới. Bấm “So tài” để tự cầm quân Đỏ đấu với Huyền Long (chọn mức Dễ, Vừa hoặc Khó), chạm quân rồi chạm ô sáng để đi; chơi hoàn toàn ngoại tuyến.": "right corner of the courtyard, near the gate. Two AI masters (Sky Phoenix plays Red, Dark Dragon plays Black) play full games by xiangqi rules. Walk up to the board and tap “Watch match” to view from above, change the view or start a new game. Tap “Play AI” to take the Red side against Dark Dragon (Easy, Medium or Hard): tap a piece, then a glowing square to move. It all works offline.",
 "Pháo hoa:": "Fireworks:",
-"trạm bắn ở sân trái, ngay cạnh hồ sen. Chọn 1 quả, chùm 5 quả hoặc đại tiệc 10 quả, rồi bấm “Châm ngòi”. Bắn nhiều quả thì pháo nổ thành chữ 福 祿 壽, đôi khi là MNM.": "launch spot in the left courtyard, right next to the lotus pond. Choose one shot, a volley of 5 or the grand show of 10, then tap “Light the fuse”. Bigger shows burst into the characters 福 祿 壽, sometimes MNM.",
+"trạm bắn ở sân trái, ngay cạnh hồ sen. Chọn 1 quả, chùm 5 quả hoặc đại tiệc 10 quả, rồi bấm “Châm ngòi”. Bắn nhiều quả thì luôn có một quả nổ thành chữ MNM, các quả còn lại ngẫu nhiên. Pháo có thể nở thành chữ 福 祿 壽 hoặc nhiều hình: trái tim, ngôi sao, mặt cười, hoa sen, bướm, thiên hà, sao Thổ, trăng khuyết (hình càng lạ càng hiếm).": "launch spot in the left courtyard, right next to the lotus pond. Choose one shot, a volley of 5 or the grand show of 10, then tap “Light the fuse”. Bigger shows always include one burst spelling MNM, and the rest are random. Fireworks can bloom into the characters 福 祿 壽 or shapes: hearts, stars, smiley faces, lotus flowers, butterflies, galaxies, Saturn and crescent moons (the stranger the shape, the rarer).",
 "Giếng nước và tắm Phật:": "Well and Buddha bathing:",
 "sân phải, gần cổng. Ở giếng, chạm “Kéo gàu” đều tay khoảng 5 lần để được 3 gáo nước (dừng lâu thì gàu tụt); mang tối đa 6 gáo. Ở đài tắm Phật, chạm “Múc nước rưới tượng” 3 lần, mỗi lần 1 gáo.": "right courtyard, near the gate. At the well, tap “Pull bucket” steadily about 5 times to get 3 scoops (pause too long and the bucket drops); carry up to 6. At the bathing altar, tap “Scoop water and pour” 3 times, 1 scoop each.",
 "Hồ cá:": "Fish pond:",
@@ -7699,6 +7807,9 @@ const I18N_RE=[
 [/^Lượt nhận còn: (\d+)$/,(m,a)=>'Claims left: '+a],
 [/^Nước đang mang: (\d+) gáo$/,(m,a)=>'Water carried: '+pl(a,'scoop')],
 [/^Nước (\d+) · (Thiên Phượng|Huyền Long) \((Đỏ|Đen)\) (đang suy nghĩ…|đang đi)$/,(m,n,p,s,v)=>'Move '+n+' · '+XN[p]+' ('+XS[s]+') '+(v==='đang đi'?'moving':'thinking…')],
+[/^Nước (\d+) · Lượt của bạn \(Đỏ\)(?: · (bạn bị chiếu!))?(?: · (chạm quân rồi chạm ô sáng để đi))?$/,(m,n,c,h)=>'Move '+n+' · Your turn (Red)'+(c?' · you are in check!':'')+(h?' · tap a piece, then a glowing square':'')],
+[/^(Bạn|Huyền Long) thắng · (.+)$/,(m,s,w)=>(s==='Bạn'?'You win':'Dark Dragon wins')+' · '+(I18N_X.CHWHY[w]||w)],
+[/^Ván (\d+) · Bạn thắng (\d+) – Hòa (\d+) – Thua (\d+)$/,(m,n,w,d,l)=>'Game '+n+' · You '+w+' – Draw '+d+' – Lost '+l],
 [/^(Đỏ|Đen) thắng · (.+)$/,(m,s,w)=>XS[s]+' wins · '+(I18N_X.CHWHY[w]||w)],
 [/^Hòa · (.+)$/,(m,w)=>'Draw · '+(I18N_X.CHWHY[w]||w)],
 [/^Quân: Đỏ (\d+) · Đen (\d+)(?: · Độ sâu (\d+))? · Thế cờ (Đỏ|Đen) \+([\d.]+)$/,(m,r,b,d,s,e)=>'Pieces: Red '+r+' · Black '+b+(d?' · Depth '+d:'')+' · Evaluation: '+XS[s]+' +'+e],
@@ -7819,7 +7930,7 @@ function tick(ts){
   }
   if(started&&birdW>.003)tgt.lerp(birdFocus,.85*birdW);
   if(started&&fc.w>.003&&openId!=='mChess')tgt.lerp(fc.p,.9*fc.w);
-  const k=1-Math.exp(-dt*(started?(fc.w>.05||birdW>.05?3.4:7):2));camPos.lerp(want,k);camTgt.lerp(tgt,k);
+  const k=1-Math.exp(-dt*(started?(fc.w>.05||birdW>.05?5:7):2));camPos.lerp(want,k);camTgt.lerp(tgt,k);
   camera.position.copy(camPos);camera.lookAt(camTgt);
   sky.position.copy(camera.position);stars.position.copy(camera.position);sunS.position.set(camera.position.x-60,40,camera.position.z-340);moonS.position.set(camera.position.x+140,200,camera.position.z-300);
   renderer.render(scene,camera);
