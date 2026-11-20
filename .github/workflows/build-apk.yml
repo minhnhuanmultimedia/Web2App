@@ -1,45 +1,102 @@
 name: Build Android APK
 
+# Cách dùng nhanh: tab Actions > "Build Android APK" > Run workflow > nhập "Tên app" > Run.
+# Chỉ "Tên app" là bắt buộc, các ô còn lại để trống thì workflow tự chọn giá trị hợp lý.
+# Hướng dẫn chi tiết xem README.md.
+
 on:
   workflow_dispatch:
     inputs:
+      app_name:
+        description: "Tên app (bắt buộc, tối đa 30 ký tự)"
+        required: true
+        type: string
       url:
-        description: "URL website (https://...). De TRONG neu dung file index.html trong repo"
+        description: "Link website https://... (để trống = đóng gói file index.html trong repo)"
         required: false
         default: ""
         type: string
-      app_name:
-        description: "Ten app (toi da 30 ky tu)"
-        required: true
-        type: string
       package_id:
-        description: "Package ID, vd: com.tenban.cuahang (chu thuong, khong dau)"
-        required: true
+        description: "Package ID (tuỳ chọn). Ví dụ: com.tenban.cuahang. Để trống = tự tạo từ tên repo"
+        required: false
+        default: ""
         type: string
       version_code:
-        description: "Version code (so nguyen, tang moi lan build)"
-        required: true
-        default: "1"
+        description: "Version code (tuỳ chọn). Để trống = tự tăng theo số lần build"
+        required: false
+        default: ""
         type: string
       build_aab:
-        description: "Build them file AAB de up Google Play"
+        description: "Build thêm file AAB để đưa lên Google Play"
         required: false
         default: false
         type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-apk-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      SITE_URL: ${{ inputs.url }}
       APP_NAME: ${{ inputs.app_name }}
-      PACKAGE_ID: ${{ inputs.package_id }}
-      VERSION_CODE: ${{ inputs.version_code }}
-      BUILD_AAB: ${{ inputs.build_aab }}
+      SITE_URL: ${{ inputs.url }}
+      INPUT_PACKAGE_ID: ${{ inputs.package_id }}
+      INPUT_VERSION_CODE: ${{ inputs.version_code }}
     steps:
       - uses: actions/checkout@v4
 
+      # ---------------------------------------------------------------
+      # 1. Kiểm tra thông tin và tự điền các giá trị bị bỏ trống
+      # ---------------------------------------------------------------
+      - name: "1. Kiểm tra thông tin nhập"
+        run: |
+          set -euo pipefail
+          fail() { echo "::error::$1"; exit 1; }
+
+          # Tên app
+          [ -n "$APP_NAME" ] && [ "${#APP_NAME}" -le 30 ] || fail "Tên app phải có từ 1 đến 30 ký tự."
+
+          # Nguồn nội dung: link website hoặc file trong repo
+          if [ -n "$SITE_URL" ]; then
+            [[ "$SITE_URL" == https://* ]] || fail "Link website phải bắt đầu bằng https://"
+            echo "Chế độ: mở website $SITE_URL"
+          elif [ -f web/index.html ] || [ -f index.html ]; then
+            echo "Chế độ: đóng gói file trong repo"
+          else
+            fail "Repo chưa có index.html. Hãy tải index.html lên repo hoặc nhập link website."
+          fi
+
+          # Package ID: không nhập thì tự tạo từ tên repo (giữ nguyên qua các lần build)
+          PACKAGE_ID="$INPUT_PACKAGE_ID"
+          if [ -z "$PACKAGE_ID" ]; then
+            SLUG="$(printf '%s' "${GITHUB_REPOSITORY#*/}" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9\n' '_' | sed 's/^_*//;s/_*$//')"
+            [ -n "$SLUG" ] || SLUG="app"
+            case "$SLUG" in [0-9]*) SLUG="app_$SLUG";; esac
+            PACKAGE_ID="com.web2app.$SLUG"
+            echo "Package ID tự tạo: $PACKAGE_ID"
+          fi
+          [[ "$PACKAGE_ID" =~ ^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$ ]] \
+            || fail "Package ID không hợp lệ (chữ thường, không dấu, ví dụ: com.tenban.cuahang)."
+
+          # Version code: không nhập thì dùng số thứ tự lần chạy (luôn tăng dần)
+          VERSION_CODE="${INPUT_VERSION_CODE:-$GITHUB_RUN_NUMBER}"
+          [[ "$VERSION_CODE" =~ ^[0-9]{1,9}$ ]] || fail "Version code phải là số nguyên."
+
+          {
+            echo "PACKAGE_ID=$PACKAGE_ID"
+            echo "VERSION_CODE=$VERSION_CODE"
+            echo "FILE_NAME=${PACKAGE_ID##*.}-v$VERSION_CODE"
+          } >> "$GITHUB_ENV"
+
+      # ---------------------------------------------------------------
+      # 2. Cài môi trường build
+      # ---------------------------------------------------------------
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -49,43 +106,34 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Kiem tra thong tin nhap
+      - name: "2. Cài công cụ (Cordova, Android SDK)"
         run: |
           set -euo pipefail
-          if [ -n "$SITE_URL" ]; then
-            case "$SITE_URL" in https://*) ;; *) echo "URL phai bat dau bang https://"; exit 1;; esac
-          elif [ ! -f web/index.html ] && [ ! -f index.html ]; then
-            echo "Chua co file index.html trong repo. Hay tai file index.html len repo hoac nhap URL."; exit 1
+          if ! command -v convert > /dev/null; then
+            sudo apt-get update -y
+            sudo apt-get install -y imagemagick
           fi
-          if ! [[ "$PACKAGE_ID" =~ ^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$ ]]; then
-            echo "Package ID khong hop le. Vi du dung: com.tenban.cuahang"; exit 1
-          fi
-          if ! [[ "$VERSION_CODE" =~ ^[0-9]{1,9}$ ]]; then echo "Version code phai la so nguyen"; exit 1; fi
-          if [ "${#APP_NAME}" -gt 30 ] || [ -z "$APP_NAME" ]; then echo "Ten app 1-30 ky tu"; exit 1; fi
-
-      - name: Cai cong cu
-        run: |
-          set -euo pipefail
-          sudo apt-get update -y
-          sudo apt-get install -y imagemagick
           npm install -g cordova
+
           SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
           echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           SDKM="$(ls -d "$SDK_ROOT"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | sort -V | tail -n1 || true)"
           if [ -z "$SDKM" ]; then SDKM="$(command -v sdkmanager)"; fi
-          echo "Dung sdkmanager: $SDKM (SDK: $SDK_ROOT)"
           yes | "$SDKM" --sdk_root="$SDK_ROOT" --licenses > /dev/null || true
           "$SDKM" --sdk_root="$SDK_ROOT" "platforms;android-36" "build-tools;36.0.0"
 
-      - name: Tao project Cordova
+      # ---------------------------------------------------------------
+      # 3. Tạo project app
+      # ---------------------------------------------------------------
+      - name: "3. Tạo project Cordova"
         run: |
           set -euo pipefail
           cordova create app "$PACKAGE_ID" "$APP_NAME"
           cd app
           cordova platform add android@15
 
-      - name: Tao icon
+      - name: "4. Tạo icon (dùng icon.png nếu có, không thì tự vẽ chữ cái đầu)"
         run: |
           set -euo pipefail
           cd app
@@ -103,27 +151,30 @@ jobs:
             convert "$SRC" -resize "${s}x${s}^" -gravity center -extent "${s}x${s}" "res/icon/${n}.png"
           done
 
-      - name: Tao config.xml va trang offline
+      - name: "5. Tạo nội dung app và config.xml"
         run: |
           set -euo pipefail
           cd app
+
+          # Chế độ đóng gói: chép file của repo vào app (ưu tiên thư mục web/)
           if [ -z "$SITE_URL" ]; then
             rm -rf www/*
             if [ -f ../web/index.html ]; then
-              echo "Che do dong goi: dung file trong thu muc web/"
+              echo "Dùng các file trong thư mục web/"
               cp -r ../web/. www/
             else
-              echo "Che do dong goi: dung index.html o thu muc goc"
+              echo "Dùng index.html ở thư mục gốc"
               find .. -maxdepth 1 -mindepth 1 ! -name .git ! -name .github ! -name app ! -name out \
-                ! -name icon.png ! -name icon-auto.png ! -name README.md -exec cp -r {} www/ \;
+                ! -name keystore-backup ! -name icon.png ! -name icon-auto.png ! -name README.md -exec cp -r {} www/ \;
             fi
           fi
+
           node - <<'EOF'
           const fs = require('fs');
           const e = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
           const hasUrl = !!process.env.SITE_URL;
           const site = hasUrl ? new URL(process.env.SITE_URL) : null;
-          if (hasUrl && site.protocol !== 'https:') throw new Error('Chi chap nhan https');
+          if (hasUrl && site.protocol !== 'https:') throw new Error('Chỉ chấp nhận https');
           const name = process.env.APP_NAME, id = process.env.PACKAGE_ID, code = process.env.VERSION_CODE;
           const host = hasUrl ? site.host : '';
           const startSrc = hasUrl ? e(site.toString()) : 'index.html';
@@ -164,17 +215,25 @@ jobs:
           </widget>
           `;
           fs.writeFileSync('config.xml', cfg);
+
+          // Chế độ website: trang chuyển hướng + trang báo mất mạng
           if (hasUrl) {
-          fs.writeFileSync('www/index.html', `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${e(site.toString())}"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body></body></html>`);
-          const target = JSON.stringify(site.toString()).replace(/</g, '\\u003c');
-          fs.writeFileSync('www/offline.html', `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${e(name)}</title>
+            const url = site.toString();
+            fs.writeFileSync('www/index.html', `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${e(url)}"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body></body></html>`);
+            const target = JSON.stringify(url).replace(/</g, '\\u003c');
+            fs.writeFileSync('www/offline.html', `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${e(name)}</title>
           <style>html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;font:16px system-ui,sans-serif;text-align:center}button{font:inherit;padding:12px 24px;border:0;border-radius:10px;background:#2563eb;color:#fff}</style></head>
           <body><main><h1>Không có kết nối mạng</h1><p>Hãy kiểm tra mạng rồi thử lại.</p><button id="r">Thử lại</button></main>
           <script>var t=${target};document.getElementById('r').onclick=function(){location.href=t};addEventListener('online',function(){location.href=t});</script></body></html>`);
           }
           EOF
 
-      - name: Chuan bi keystore de ky app
+      # ---------------------------------------------------------------
+      # 4. Khoá ký app (keystore)
+      #    - Đã có Secrets: dùng lại khoá cũ (bắt buộc để cập nhật app trên Google Play)
+      #    - Chưa có Secrets: tạo khoá mới và xuất ra artifact "keystore-backup"
+      # ---------------------------------------------------------------
+      - name: "6. Chuẩn bị khoá ký app (keystore)"
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -184,13 +243,13 @@ jobs:
           mkdir -p ../out
           NEW=0
           if [ -n "${KEYSTORE_BASE64:-}" ] && [ -n "${KEYSTORE_PASSWORD:-}" ]; then
-            echo "Dung keystore co dinh tu GitHub Secrets (khoa ky giu nguyen qua cac lan build)."
+            echo "Dùng keystore cố định từ GitHub Secrets."
             printf '%s' "$KEYSTORE_BASE64" | tr -d ' \r\n' | base64 -d > release.keystore
             PASS="$(printf '%s' "$KEYSTORE_PASSWORD" | tr -d ' \r\n')"
             echo "::add-mask::$PASS"
           else
             NEW=1
-            echo "Chua co Secrets -> tao keystore MOI (chi nen dung cho lan dau)."
+            echo "Chưa có Secrets, tạo keystore MỚI (chỉ nên dùng cho lần build đầu)."
             PASS="$(openssl rand -base64 24 | tr -d '/+=\n' | cut -c1-24)"
             echo "::add-mask::$PASS"
             export KS_PASS="$PASS"
@@ -200,27 +259,34 @@ jobs:
               -dname "CN=${PACKAGE_ID}, O=${PACKAGE_ID}, C=VN"
           fi
           export KS_PASS="$PASS"
-          # Kiem tra keystore + alias + mat khau dung truoc khi build
+
           keytool -list -keystore release.keystore -alias upload -storepass:env KS_PASS > /dev/null \
-            || { echo "Keystore/alias(upload)/mat khau khong khop. Kiem tra lai Secrets."; exit 1; }
+            || { echo "::error::Keystore, alias (upload) hoặc mật khẩu không khớp. Kiểm tra lại Secrets."; exit 1; }
+
           node -e "require('fs').writeFileSync('build.json', JSON.stringify({android:{release:{keystore:'release.keystore',storePassword:process.env.KS_PASS,alias:'upload',password:process.env.KS_PASS,keystoreType:'PKCS12'}}}))"
+
+          echo "NEW_KEYSTORE=$NEW" >> "$GITHUB_ENV"
           if [ "$NEW" = "1" ]; then
-            cp release.keystore ../out/release.keystore
-            base64 -w0 release.keystore > ../out/keystore-base64.txt
-            printf 'KEYSTORE MOI - SAO LUU CAN THAN, KHONG CHIA SE\nAlias: upload\nMat khau: %s\n\nDE LAN BUILD SAU DUNG LAI DUNG KHOA KY NAY, tao 2 Secrets trong repo (Settings > Secrets and variables > Actions > New repository secret):\n  KEYSTORE_BASE64   = noi dung file keystore-base64.txt\n  KEYSTORE_PASSWORD = mat khau o tren\n' "$PASS" > ../out/keystore-info.txt
-            echo "::warning::Da tao keystore moi. Tai artifact, tao Secrets KEYSTORE_BASE64 va KEYSTORE_PASSWORD de cac lan build sau dung cung khoa ky (bat buoc de cap nhat app tren Google Play)."
+            mkdir -p ../keystore-backup
+            cp release.keystore ../keystore-backup/release.keystore
+            base64 -w0 release.keystore > ../keystore-backup/keystore-base64.txt
+            printf 'KEYSTORE MỚI - SAO LƯU CẨN THẬN, KHÔNG CHIA SẺ\nAlias: upload\nMật khẩu: %s\n\nĐể các lần build sau dùng lại đúng khoá này, tạo 2 Secrets trong repo\n(Settings > Secrets and variables > Actions > New repository secret):\n  KEYSTORE_BASE64   = nội dung file keystore-base64.txt\n  KEYSTORE_PASSWORD = mật khẩu ở trên\n' "$PASS" > ../keystore-backup/keystore-info.txt
+            echo "::warning::Đã tạo keystore mới. Tải artifact keystore-backup và tạo 2 Secrets KEYSTORE_BASE64, KEYSTORE_PASSWORD để các lần build sau dùng cùng khoá ký."
           fi
 
-      - name: Build APK
+      # ---------------------------------------------------------------
+      # 5. Build
+      # ---------------------------------------------------------------
+      - name: "7. Build APK"
         run: |
           set -euo pipefail
           cd app
           cordova build android --release --buildConfig=build.json -- --packageType=apk
           APK="$(find platforms/android/app/build/outputs/apk -name '*.apk' ! -name '*unsigned*' ! -name '*debug*' | head -n1)"
           test -n "$APK"
-          cp "$APK" ../out/app-release.apk
+          cp "$APK" "../out/$FILE_NAME.apk"
 
-      - name: Build AAB (tuy chon)
+      - name: "8. Build AAB (nếu bật)"
         if: ${{ inputs.build_aab }}
         run: |
           set -euo pipefail
@@ -228,10 +294,44 @@ jobs:
           cordova build android --release --buildConfig=build.json -- --packageType=bundle
           AAB="$(find platforms/android/app/build/outputs/bundle -name '*.aab' | head -n1)"
           test -n "$AAB"
-          cp "$AAB" ../out/app-release.aab
+          cp "$AAB" "../out/$FILE_NAME.aab"
 
+      # ---------------------------------------------------------------
+      # 6. Xuất kết quả
+      # ---------------------------------------------------------------
       - uses: actions/upload-artifact@v4
         with:
           name: android-app
           path: out/
           retention-days: 30
+
+      - name: "Artifact keystore-backup (chỉ khi vừa tạo khoá mới)"
+        if: ${{ env.NEW_KEYSTORE == '1' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: keystore-backup
+          path: keystore-backup/
+          retention-days: 14
+
+      - name: "Tóm tắt kết quả"
+        if: ${{ success() }}
+        run: |
+          {
+            echo "## Build thành công"
+            echo
+            echo "| Thông tin | Giá trị |"
+            echo "|---|---|"
+            echo "| Tên app | $APP_NAME |"
+            echo "| Package ID | \`$PACKAGE_ID\` |"
+            echo "| Version code | $VERSION_CODE |"
+            echo "| Nguồn | ${SITE_URL:-File trong repo} |"
+            echo
+            echo "**Tải file:** kéo xuống mục **Artifacts** ở cuối trang này, chọn \`android-app\` (chứa \`$FILE_NAME.apk\`)."
+            if [ "${NEW_KEYSTORE:-0}" = "1" ]; then
+              echo
+              echo "### Việc cần làm ngay: lưu khoá ký"
+              echo "Lần này workflow tạo khoá ký **mới**. Tải artifact \`keystore-backup\` (giữ 14 ngày), rồi tạo 2 Secrets"
+              echo "\`KEYSTORE_BASE64\` và \`KEYSTORE_PASSWORD\` trong *Settings > Secrets and variables > Actions*."
+              echo "Nếu không, lần build sau sẽ ra khoá khác và **không thể cập nhật** app đã cài hoặc đã đăng lên Google Play."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
